@@ -2,8 +2,7 @@ import React from 'react';
 
 import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
-
-import Card from '../Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 
 export type MarkdownCardProps = {
   mdText: string | null;
@@ -33,7 +32,7 @@ const MarkdownCard: React.FC<MarkdownCardProps> = props => {
       )}
 
       {hasWrapper && (
-        <Card padding={16} customStyle="dark:text-white">
+        <Card className="dark:text-white p-4">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{mdText}</ReactMarkdown>
         </Card>
       )}

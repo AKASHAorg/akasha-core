@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from 'react';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
 
 import { EllipsisVerticalIcon, TriangleAlertIcon, InfoIcon } from 'lucide-react';
 import {
@@ -17,7 +17,7 @@ import {
   AppImageSource,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {
   Tooltip,
@@ -133,7 +133,7 @@ export const AppInfoHeader: React.FC<AppInfoHeaderProps> = props => {
                   </AppInfoPill>
                 )}
                 <AppInfoPill customStyle="bg-tertiaryLight dark:bg-tertiaryDark">
-                  <ExtensionIcon type={extensionType} />
+                  <ExtensionTypeIcon extensionType={extensionType} />
                   <Typography
                     variant="xs"
                     className="font-medium text-secondaryLight dark:text-white"

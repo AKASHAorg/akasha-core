@@ -4,7 +4,7 @@ import { BlockParcel, BlockParcelProps } from '../block-parcel';
 import { type ParcelConfigObject } from 'single-spa';
 import { MatchingBlock } from '../common.types';
 import { GetContentBlockByIdQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
-import { TextLineLoadingIndicator } from '../../text-line-loading-indicator';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 
 export type RenderBlockProps = {
   state: { parcels: (MatchingBlock & { config: ParcelConfigObject })[] };
@@ -41,8 +41,8 @@ export const RenderBlock: React.FC<RenderBlockProps> = props => {
     <>
       {!blockData && !matchingBlocks.length && (
         <div className="w-full flex flex-col mb-2 gap-y-1">
-          <TextLineLoadingIndicator width="w-full" />
-          <TextLineLoadingIndicator width="w-2/3" />
+          <Skeleton className="bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white animate-pulse w-full h-4 rounded" />
+          <Skeleton className="bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white animate-pulse w-2/3 h-4 rounded" />
         </div>
       )}
       {blockData && !matchingBlocks.length && (

@@ -7,7 +7,8 @@ import {
 } from '@akashaorg/ui/lib/components/accordion';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import ExtensionIcon from '@akashaorg/design-system-core/lib/components/ExtensionIcon';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
@@ -18,7 +19,7 @@ import Section from './section';
 import { AppInfoPill } from '../app-info/info-pill';
 import ExtensionImageGallery from '../extension-image-gallery';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
@@ -146,7 +147,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
           </Stack>
 
           <AppInfoPill customStyle="w-fit self-end bg-tertiaryLight dark:bg-tertiaryDark">
-            <ExtensionIcon type={extensionData?.applicationType} />
+            <ExtensionTypeIcon extensionType={extensionData?.applicationType} />
             <Typography variant="xs" className="font-medium text-secondaryLight dark:text-white">
               {extensionData?.applicationType}
             </Typography>

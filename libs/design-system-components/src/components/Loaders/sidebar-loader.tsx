@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 
 /**
  * Component used to display a skeleton placeholder for data loading
@@ -17,30 +17,18 @@ const SidebarLoader: React.FC = () => {
       >
         <Stack direction="row" className="w-full h-fit justify-between w-full">
           <Stack direction="row" spacing={1} className="w-full">
-            <TextLine
-              round="rounded-full"
-              height="h-10"
-              width="w-10"
-              customStyle="shrink-0"
-              animated={true}
-            />
+            <Skeleton className="rounded-full h-10 w-10 shrink-0" />
             <Stack
               direction="column"
               spacing={1}
               className="max-w(xl:[10rem] lg:[8rem] md:[10rem] xs:[2rem]) w-full"
             >
-              <TextLine title="tagName" animated={true} width="w-8/12" />
-              <TextLine title="tagName" animated={true} width="w-8/12" />
+              <Skeleton title="tagName" className="w-8/12" />
+              <Skeleton title="tagName" className="w-8/12" />
             </Stack>
           </Stack>
           <Stack justifyContent="between" className="w-fit">
-            <TextLine
-              round="rounded-full"
-              height="h-10"
-              width="w-10"
-              customStyle="shrink-0"
-              animated={true}
-            />
+            <Skeleton className="rounded-full h-10 w-10 shrink-0" />
           </Stack>
         </Stack>
       </Stack>

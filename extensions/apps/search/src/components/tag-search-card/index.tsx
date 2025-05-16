@@ -11,8 +11,8 @@ import {
   DuplexButtonHover,
   DuplexButtonInactive,
 } from '@akashaorg/ui/lib/akasha-components/duplex-button';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
-import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
+import SubtitleTextIcon from '@akashaorg/design-system-components/lib/components/SubtitleTextIcon';
 
 export type TagSearchCardProps = {
   // data
@@ -56,15 +56,17 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
               onClick={onClickTag}
               label={tag.name}
               subtitle={`${tag.totalPosts} Beams`}
-              icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
+              icon={
+                <HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+              }
               backgroundColor={true}
             />
           )}
 
           {!tag && (
             <Stack alignItems="center" justifyContent="between" className="py-2">
-              <TextLine title="tagName" animated={false} width="140px" />
-              <TextLine title="tagName" animated={false} width="80px" />
+              <Skeleton title="tagName" className="140px" />
+              <Skeleton title="tagName" className="80px" />
             </Stack>
           )}
         </Stack>

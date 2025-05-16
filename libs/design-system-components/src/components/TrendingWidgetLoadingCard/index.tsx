@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 import TrendingWidgetItemLoader from './trending-widget-item-loader';
 
 /**
@@ -14,7 +14,7 @@ const TrendingWidgetLoadingCard: React.FC = () => {
     <Card>
       <Stack direction="column" spacing={2} alignItems="center" className="w-full">
         <Stack direction="column" spacing={6} alignItems="start" className="w-full">
-          <TextLine width="w-3/6" height="h-[1.5rem]" animated />
+          <Skeleton className="w-3/6 h-[1.5rem]" />
           {Array.from({ length: 3 }, (_el, index: number) => (
             <React.Fragment key={index}>
               <TrendingWidgetItemLoader />

@@ -5,7 +5,7 @@ import { type ParcelConfigObject } from 'single-spa';
 import { BlockParcel } from './block-parcel';
 import { MatchingBlock } from './common.types';
 import { resolveConfigs } from './resolve-configs';
-import { TextLineLoadingIndicator } from '../text-line-loading-indicator';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 
 export type EditorBlockExtensionProps = {
   blockRef?: React.RefObject<BlockInstanceMethods>;
@@ -85,8 +85,8 @@ const EditorBlockExtensionRoot: React.FC<EditorBlockExtensionProps> = props => {
     <>
       {!state.parcels.length && !state.isMatched && (
         <div className="w-full gap-y-1 mb-2">
-          <TextLineLoadingIndicator width="w-full" />
-          <TextLineLoadingIndicator width="w-2/3" />
+          <Skeleton className="w-full" />
+          <Skeleton className="bg-gradient-to-r from-grey6 via-grey8 to-white dark:from-grey5 dark:via-grey7 dark:to-white animate-pulse w-2/3 h-4 rounded" />
         </div>
       )}
       {state.parcels.map((matchingBlock, index) => {
