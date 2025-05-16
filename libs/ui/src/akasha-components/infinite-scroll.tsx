@@ -260,9 +260,11 @@ const ScrollRestoration = ({
       </WindowScrollRestoration>
     );
 
-  throw new Error(
-    'Scroll restoration is currently only supported when the scroll element is the window.',
-  );
+  if (virtualizer.scrollElement) {
+    throw new Error(
+      'Scroll restoration is currently only supported when the scroll element is the window.',
+    );
+  }
 };
 
 export { InfiniteScroll, InfiniteScrollList, ScrollRestoration };
