@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import {
@@ -89,11 +89,11 @@ const MiniProfileCard: React.FC<MiniProfileCardProps> = props => {
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="center">
             {statsLoading ? (
               <>
-                <TextLine width="w-14" height="h-5" animated />
+                <Skeleton className="w-14 h-5" />
                 <RenderText label="|" />
-                <TextLine width="w-14" height="h-5" animated />
+                <Skeleton className="w-14 h-5" />
                 <RenderText label="|" />
-                <TextLine width="w-14" height="h-5" animated />
+                <Skeleton className="w-14 h-5" />
               </>
             ) : (
               <>

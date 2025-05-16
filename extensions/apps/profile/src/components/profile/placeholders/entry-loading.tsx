@@ -1,6 +1,6 @@
 import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 
 type EntryLoadingProps = {
   customStyle?: string;
@@ -16,19 +16,13 @@ const EntryLoading: React.FC<EntryLoadingProps> = props => {
       className={`pb-4 ${customStyle}`}
     >
       <Stack direction="row" spacing={1}>
-        <TextLine
-          round="rounded-full"
-          height="h-10"
-          width="w-10"
-          customStyle="shrink-0"
-          animated={true}
-        />
+        <Skeleton className="rounded-full h-10 w-10 shrink-0" />
         <Stack direction="column" justifyContent="center" spacing={1}>
-          <TextLine width="w-24" height="h-4" animated />
-          <TextLine width="w-24" height="h-4" animated />
+          <Skeleton className="w-24 h-4" />
+          <Skeleton className="w-24 h-4" />
         </Stack>
       </Stack>
-      <TextLine width="w-24" animated />
+      <Skeleton className="w-24" />
     </Stack>
   );
 };
