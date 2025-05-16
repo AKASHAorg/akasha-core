@@ -16,7 +16,12 @@ import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui
 import ExtensionReleasePublishForm from '../../extension-release-publish-form';
 import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../../constants';
 import { NetworkStatus } from '@apollo/client';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { Loader2 } from 'lucide-react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 type EditTestReleasePageProps = {
@@ -183,12 +188,18 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
   }
   return (
     <>
-      <Modal show={isLoadingTestMode}>
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <Typography variant="sm" className="px-4 py-2">
-          {t('Loading test mode')}
-        </Typography>
-      </Modal>
+      <AlertDialog defaultOpen={isLoadingTestMode}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogDescription>
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <Typography variant="sm" className="px-4 py-2">
+                {t('Loading test mode')}
+              </Typography>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
       <Card className="shadow-none p-0">
         <Stack spacing={2}>
           <Stack className="p-4">

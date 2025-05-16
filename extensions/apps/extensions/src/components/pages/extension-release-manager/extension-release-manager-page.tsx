@@ -31,9 +31,20 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { ApolloError, NetworkStatus } from '@apollo/client';
+
 const ENTRY_HEIGHT = 82;
+
 type ExtensionReleaseManagerPageProps = {
   extensionId: string;
   extensionName?: string;
@@ -397,33 +408,28 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           </Card>
         )}
       </Stack>
-      <Modal
-        show={showModal}
-        onClose={handleModalClose}
-        actions={[
-          {
-            label: t('Cancel'),
-            variant: 'secondary',
-            onClick: handleModalClose,
-          },
-          {
-            label: t('Publish Extension'),
-            variant: 'primary',
-            onClick: handlePublishExtensionNav,
-          },
-        ]}
-        title={{
-          label: t('Release Cannot Be Published'),
-        }}
-      >
-        <Stack className="max-w-[567px]">
-          <Typography className="text-center">
-            {t(
-              'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
-            )}
-          </Typography>
-        </Stack>
-      </Modal>
+      <AlertDialog open={showModal} onOpenChange={handleModalClose}>
+        <AlertDialogContent className="py-4 px-6 md:px-24">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('Release Cannot Be Published')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Stack className="max-w-[567px]">
+                <Typography className="text-center">
+                  {t(
+                    'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
+                  )}
+                </Typography>
+              </Stack>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleModalClose}>{t('Cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handlePublishExtensionNav}>
+              {t('Publish Extension')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

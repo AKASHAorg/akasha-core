@@ -1,5 +1,14 @@
 import React, { useCallback, useState } from 'react';
-import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -17,8 +26,8 @@ const ZOOM_STEP = 0.01;
 const CROPPER_WIDTH = 320;
 const CROPPER_HEIGHT = 224;
 export type ImageModalProps = {
-  title: ModalProps['title'];
-  show: ModalProps['show'];
+  title: { label: string };
+  show: boolean;
   cancelLabel: string;
   saveLabel: string;
   isSavingImage: boolean;
@@ -28,8 +37,9 @@ export type ImageModalProps = {
   width?: number;
   height?: number;
   onSave: (image: Blob, indexOfEditedImage?: number) => void;
-} & Partial<Pick<ModalProps, 'rightAlignActions' | 'onClose'>> &
-  Partial<Pick<CropperProps, 'aspect' | 'objectFit' | 'cropShape'>> &
+  rightAlignActions?: boolean;
+  onClose?: () => void;
+} & Partial<Pick<CropperProps, 'aspect' | 'objectFit' | 'cropShape'>> &
   Partial<Pick<CroppedImagePreviewProps, 'previewTitle' | 'previews'>>;
 
 /**
@@ -107,108 +117,102 @@ const ImageModal: React.FC<ImageModalProps> = ({
     ? `border-4 border-errorLight dark:border-errorDark`
     : '';
   return (
-    <Modal
-      title={title}
-      show={show}
-      onClose={onClose}
-      rightAlignActions={rightAlignActions}
-      actions={[
-        {
-          variant: 'text',
-          disabled: isSavingImage,
-          label: cancelLabel,
-          onClick: onClose,
-        },
-        {
-          variant: 'primary',
-          label: saveLabel,
-          loading: isSavingImage,
-          disabled: showCropError,
-          onClick: handleSaveClick,
-        },
-      ]}
-      showDivider={true}
-    >
-      {images.length >= 2 && (
-        <Stack direction="row" justifyContent="start" alignItems="center" spacing={2}>
-          {images.map((imageData, index) => {
-            const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
-            return (
-              <button key={index} onClick={() => setSelectedIndexImage(index)}>
-                <Img src={imageUrl} customStyle="object-contain w-10 h-10 rounded-[0.5rem]" />
-              </button>
-            );
-          })}
-        </Stack>
-      )}
-      <div
-        style={cssVars({
-          '--width': `${width / 16}rem`,
-          '--height': `${height / 16}rem`,
-        })}
-      >
-        <Card
-          padding="p-0"
-          elevation="none"
-          radius={20}
-          border={showCropError}
-          customStyle={`relative w-[var(--width)] h-[var(--height)] overflow-hidden bg-transparent ${imageContainerBorderStyle}`}
-        >
-          <Cropper
-            image={imageUrl}
-            crop={crop}
-            zoom={zoom}
-            objectFit={objectFit}
-            cropShape={cropShape}
-            aspect={aspectRatio}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onCropAreaChange={setCroppedArea}
-            onZoomChange={setZoom}
-          />
-        </Card>
-      </div>
-      {showCropError && (
-        <Stack direction="row" spacing={1} alignItems="center">
-          <XCircleIcon className="h-6 w-6 [&>*]:fill-errorLight dark:[&>*]:fill-errorDark" />
-          <Typography
-            variant="xs"
-            className="font-medium font-normal text-errorLight dark:text-errorDark"
-          >
-            {errorLabel}
-          </Typography>
-        </Stack>
-      )}
-      <Typography variant="xs" className="font-medium text-center font-normal">
-        {dragToRepositionLabel}
-      </Typography>
-      <Stack direction="column" spacing={4} className="w-full mb-2">
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <ZoomOutIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-          <input
-            aria-label="range-input"
-            type="range"
-            value={zoom}
-            min={MIN_ZOOM}
-            max={MAX_ZOOM}
-            step={ZOOM_STEP}
-            className={
-              'grow h-2 bg-gray-200 dark:bg-gray-700 rounded-[0.5rem] appearance-none cursor-pointer'
-            }
-            onChange={e => setZoom(Number(e.target.value))}
-          />
-          <ZoomInIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-        </Stack>
-        {previews?.length > 0 && (
-          <CroppedImagePreviews
-            previewTitle={previewTitle}
-            previews={previews}
-            imageUrl={imageUrl}
-            croppedArea={croppedArea}
-          />
-        )}
-      </Stack>
-    </Modal>
+    <AlertDialog open={show} onOpenChange={onClose}>
+      <AlertDialogContent className="py-4 px-6 md:px-24">
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title?.label}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {images?.length >= 2 && (
+              <Stack direction="row" justifyContent="start" alignItems="center" spacing={2}>
+                {images.map((imageData, index) => {
+                  const imageUrl = typeof imageData === 'string' ? imageData : imageData?.src;
+                  return (
+                    <button key={index} onClick={() => setSelectedIndexImage(index)}>
+                      <Img src={imageUrl} customStyle="object-contain w-10 h-10 rounded-[0.5rem]" />
+                    </button>
+                  );
+                })}
+              </Stack>
+            )}
+            <div
+              style={cssVars({
+                '--width': `${width / 16}rem`,
+                '--height': `${height / 16}rem`,
+              })}
+            >
+              <Card
+                padding="p-0"
+                elevation="none"
+                radius={20}
+                border={showCropError}
+                customStyle={`relative w-[var(--width)] h-[var(--height)] overflow-hidden bg-transparent ${imageContainerBorderStyle}`}
+              >
+                <Cropper
+                  image={imageUrl}
+                  crop={crop}
+                  zoom={zoom}
+                  objectFit={objectFit}
+                  cropShape={cropShape}
+                  aspect={aspectRatio}
+                  onCropChange={setCrop}
+                  onCropComplete={onCropComplete}
+                  onCropAreaChange={setCroppedArea}
+                  onZoomChange={setZoom}
+                />
+              </Card>
+            </div>
+            {showCropError && (
+              <Stack direction="row" spacing={1} alignItems="center">
+                <XCircleIcon className="h-6 w-6 [&>*]:fill-errorLight dark:[&>*]:fill-errorDark" />
+                <Typography
+                  variant="xs"
+                  className="font-medium font-normal text-errorLight dark:text-errorDark"
+                >
+                  {errorLabel}
+                </Typography>
+              </Stack>
+            )}
+            <Typography variant="xs" className="font-medium text-center font-normal">
+              {dragToRepositionLabel}
+            </Typography>
+            <Stack direction="column" spacing={4} className="w-full mb-2">
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <ZoomOutIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+                <input
+                  aria-label="range-input"
+                  type="range"
+                  value={zoom}
+                  min={MIN_ZOOM}
+                  max={MAX_ZOOM}
+                  step={ZOOM_STEP}
+                  className={
+                    'grow h-2 bg-gray-200 dark:bg-gray-700 rounded-[0.5rem] appearance-none cursor-pointer'
+                  }
+                  onChange={e => setZoom(Number(e.target.value))}
+                />
+                <ZoomInIcon className="h-6 w-6 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+              </Stack>
+              {previews?.length > 0 && (
+                <CroppedImagePreviews
+                  previewTitle={previewTitle}
+                  previews={previews}
+                  imageUrl={imageUrl}
+                  croppedArea={croppedArea}
+                />
+              )}
+            </Stack>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className={`${rightAlignActions ? 'justify-end' : 'justify-center'}`}>
+          <AlertDialogCancel disabled={isSavingImage} onClick={onClose}>
+            {cancelLabel}
+          </AlertDialogCancel>
+          <AlertDialogAction disabled={showCropError} onClick={handleSaveClick}>
+            {saveLabel}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 export default ImageModal;

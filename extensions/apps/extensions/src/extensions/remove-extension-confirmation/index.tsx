@@ -6,13 +6,23 @@ import {
   useAkashaStore,
 } from '@akashaorg/ui-core-hooks';
 import { EventTypes, Extension, IRootExtensionProps } from '@akashaorg/typings/lib/ui';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useUpdateAppMutation } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import getSDK from '@akashaorg/core-sdk';
 import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../constants';
 import { updateAppMutationCache } from './update-app-mutation-cache';
+
 const Component: React.FC<IRootExtensionProps> = () => {
   const sdk = getSDK();
   const { t } = useTranslation();
@@ -111,43 +121,42 @@ const Component: React.FC<IRootExtensionProps> = () => {
   };
   const isQueryCalled = updateAppQuery.called && updateAppQuery.loading;
   return (
-    <Modal
-      show={modalData?.name === 'remove-extension-confirmation'}
-      actions={[
-        {
-          label: t('Cancel'),
-          variant: 'secondary',
-          disabled: isQueryCalled,
-          onClick: handleModalClose,
-        },
-        {
-          label: t('Remove'),
-          variant: 'primary',
-          disabled: isQueryCalled,
-          onClick: handleRemove,
-        },
-      ]}
-      // optionally show title only when query is not yet called
-      {...(!isQueryCalled && {
-        title: {
-          label: t('Are you sure you want to remove this extension?'),
-          variant: 'h6',
-        },
-      })}
-      customStyle="py-4 px-6 md:px-24"
-      onClose={handleModalClose}
+    <AlertDialog
+      open={modalData?.name === 'remove-extension-confirmation'}
+      onOpenChange={handleModalClose}
     >
-      {updateAppQuery.error && <Typography variant="sm">{updateAppQuery.error.message}</Typography>}
-      {isQueryCalled && (
-        <Typography variant="sm">{t('Removing Extension. Please wait')}</Typography>
-      )}
-      {!updateAppQuery.error &&
-        updateAppQuery.called &&
-        !updateAppQuery.loading &&
-        !updateAppQuery.data?.updateAkashaApp && (
-          <Typography>{t('Extension successfully removed.')}</Typography>
-        )}
-    </Modal>
+      <AlertDialogContent className="py-4 px-6 md:px-24">
+        <AlertDialogHeader>
+          {!isQueryCalled && (
+            <AlertDialogTitle>
+              {t('Are you sure you want to remove this extension?')}
+            </AlertDialogTitle>
+          )}
+          <AlertDialogDescription>
+            {updateAppQuery.error && (
+              <Typography variant="sm">{updateAppQuery.error.message}</Typography>
+            )}
+            {isQueryCalled && (
+              <Typography variant="sm">{t('Removing Extension. Please wait')}</Typography>
+            )}
+            {!updateAppQuery.error &&
+              updateAppQuery.called &&
+              !updateAppQuery.loading &&
+              !updateAppQuery.data?.updateAkashaApp && (
+                <Typography>{t('Extension successfully removed.')}</Typography>
+              )}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isQueryCalled} onClick={handleModalClose}>
+            {t('Cancel')}
+          </AlertDialogCancel>
+          <AlertDialogAction disabled={isQueryCalled} onClick={handleRemove}>
+            {t('Remove')}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 const RemoveAppModal = (props: IRootExtensionProps) => {

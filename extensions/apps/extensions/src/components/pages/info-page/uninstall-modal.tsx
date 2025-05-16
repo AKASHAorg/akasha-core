@@ -1,6 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import getSDK from '@akashaorg/core-sdk';
-import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
+
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -46,7 +56,8 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
       logger.error(`uninstall failed: ${JSON.stringify(err)}`);
     }
   }, [appName, logger]);
-  const modalProps: Pick<ModalProps, 'title' | 'actions'> = React.useMemo(() => {
+
+  const modalProps = React.useMemo(() => {
     switch (modalState) {
       case UninstallModalStates.CONFIRMATION:
         return {
@@ -54,18 +65,18 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
             label: t('Uninstall extension'),
             variant: 'h5',
           },
-          actions: [
-            {
+          actions: {
+            primary: {
               variant: 'secondary',
               label: t('Cancel'),
               onClick: onModalClose,
             },
-            {
+            secondary: {
               variant: 'primary',
               label: t('Uninstall'),
               onClick: onUninstall,
             },
-          ],
+          },
         };
       case UninstallModalStates.ERROR:
         return {
@@ -73,13 +84,13 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
             label: t('Uninstall failed'),
             variant: 'h5',
           },
-          actions: [
-            {
+          actions: {
+            secondary: {
               variant: 'secondary',
               label: t('OK'),
               onClick: onModalClose,
             },
-          ],
+          },
         };
       case UninstallModalStates.RELOAD_PAGE:
         return {
@@ -100,49 +111,67 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
     }
   }, [show]);
   return (
-    <Modal
-      {...modalProps}
-      onClose={() => {
+    <AlertDialog
+      open={show}
+      onOpenChange={() => {
         if (modalState !== UninstallModalStates.LOADING) {
           onModalClose();
         }
       }}
-      show={show}
-      customStyle="w-80 md:w-[38rem] md:px-6"
     >
-      {modalState === UninstallModalStates.CONFIRMATION && (
-        <Typography className="text-center">
-          {t(
-            'Are you sure you want to uninstall {{appDisplayName}}? This action might affect the appearance of functionality of other apps',
+      <AlertDialogContent className="w-80 md:w-[38rem] md:px-6">
+        <AlertDialogHeader>
+          <AlertDialogTitle>{modalProps?.title?.label}</AlertDialogTitle>
+
+          <AlertDialogDescription>
+            {modalState === UninstallModalStates.CONFIRMATION && (
+              <Typography className="text-center">
+                {t(
+                  'Are you sure you want to uninstall {{appDisplayName}}? This action might affect the appearance of functionality of other apps',
+                  {
+                    appDisplayName,
+                  },
+                )}
+              </Typography>
+            )}
             {
-              appDisplayName,
-            },
+              //@TODO replace with Loader component once its created
+            }
+            {modalState === UninstallModalStates.LOADING && (
+              <Stack spacing={5} alignItems="center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <Typography variant="sm" bold>
+                  {t('Uninstalling extension...')}
+                </Typography>
+              </Stack>
+            )}
+            {modalState === UninstallModalStates.RELOAD_PAGE && (
+              <Typography className="text-center">
+                {t('The page will now reload to prevent possible technical issues. ')}
+              </Typography>
+            )}
+            {modalState === UninstallModalStates.ERROR && (
+              <Typography className="text-center">
+                {t(
+                  'An error occurred while trying to uninstall the extension. Please check your network connection and try again.',
+                )}
+              </Typography>
+            )}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          {modalProps?.actions?.secondary && (
+            <AlertDialogCancel onClick={modalProps?.actions?.secondary?.onClick}>
+              {modalProps?.actions?.secondary?.label}
+            </AlertDialogCancel>
           )}
-        </Typography>
-      )}
-      {
-        //@TODO replace with Loader component once its created
-      }
-      {modalState === UninstallModalStates.LOADING && (
-        <Stack spacing={5} alignItems="center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <Typography variant="sm" bold>
-            {t('Uninstalling extension...')}
-          </Typography>
-        </Stack>
-      )}
-      {modalState === UninstallModalStates.RELOAD_PAGE && (
-        <Typography className="text-center">
-          {t('The page will now reload to prevent possible technical issues. ')}
-        </Typography>
-      )}
-      {modalState === UninstallModalStates.ERROR && (
-        <Typography className="text-center">
-          {t(
-            'An error occurred while trying to uninstall the extension. Please check your network connection and try again.',
+          {modalProps?.actions?.primary && (
+            <AlertDialogAction onClick={modalProps?.actions?.primary?.onClick}>
+              {modalProps?.actions?.primary?.label}
+            </AlertDialogAction>
           )}
-        </Typography>
-      )}
-    </Modal>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };

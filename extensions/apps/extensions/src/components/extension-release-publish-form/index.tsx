@@ -16,7 +16,16 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export enum FieldName {
   versionNumber = 'versionNumber',
@@ -220,28 +229,20 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
           </Stack>
         </Stack>
       </form>
-      <Modal
-        title={{
-          label: confirmationModalTitleLabel,
-        }}
-        show={showConfirmationModal}
-        onClose={onConfirmationModalClose}
-        customStyle="max-w-[615px]"
-        actions={[
-          {
-            variant: 'text',
-            label: cancelLabel,
-            onClick: onConfirmationModalClose,
-          },
-          {
-            variant: 'primary',
-            label: confirmLabel,
-            onClick: handleSave,
-          },
-        ]}
-      >
-        <Typography>{confirmationModalDescriptionLabel}</Typography>
-      </Modal>
+      <AlertDialog open={showConfirmationModal} onOpenChange={onConfirmationModalClose}>
+        <AlertDialogContent className="max-w-[615px]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{confirmationModalTitleLabel}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Typography>{confirmationModalDescriptionLabel}</Typography>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={onConfirmationModalClose}>{cancelLabel}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSave}>{confirmLabel}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Form>
   );
 };

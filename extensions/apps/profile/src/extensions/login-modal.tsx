@@ -2,7 +2,16 @@ import React from 'react';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-core-hooks';
 const LoginModal = () => {
@@ -42,37 +51,31 @@ const LoginModal = () => {
     );
   };
   return (
-    <Modal
-      show={modalData?.name === 'login'}
-      title={{
-        label: t('{{messageTitle}}', {
-          messageTitle: messageTitle.current,
-        }),
-        variant: 'h6',
-      }}
-      actions={[
-        {
-          label: t('Cancel'),
-          variant: 'secondary',
-          onClick: handleModalClose,
-        },
-        {
-          label: t('Connect'),
-          variant: 'primary',
-          onClick: handleConnectClick,
-        },
-      ]}
-      onClose={handleModalClose}
-      customStyle="py-4 px-6 md:px-24"
-    >
-      <Stack alignItems="center" spacing={2} className="w-full">
-        <Typography className="text-center">
-          {t('{{message}}', {
-            message: message.current,
-          })}
-        </Typography>
-      </Stack>
-    </Modal>
+    <AlertDialog open={modalData?.name === 'login'} onOpenChange={handleModalClose}>
+      <AlertDialogContent className="py-4 px-6 md:px-24">
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            {t('{{messageTitle}}', {
+              messageTitle: messageTitle?.current,
+            })}
+          </AlertDialogTitle>
+
+          <AlertDialogDescription>
+            <Stack alignItems="center" spacing={2} className="w-full">
+              <Typography className="text-center">
+                {t('{{message}}', {
+                  message: message?.current,
+                })}
+              </Typography>
+            </Stack>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={handleModalClose}>{t('Cancel')}</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConnectClick}>{t('Connect')}</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

@@ -131,7 +131,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                {menuItems.map(item => (
+                {menuItems?.map(item => (
                   <DropdownMenuItem
                     key={item.label}
                     onClick={() => item.onClick(item.label)}

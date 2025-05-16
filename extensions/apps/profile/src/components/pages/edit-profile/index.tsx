@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   ErrorLoader,
@@ -315,59 +324,60 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
           }}
         />
       </Card>
-      <Modal
-        title={{
-          label: t('Changing to NSFW Profile'),
-        }}
-        show={showNsfwModal}
-        onClose={() => {
-          setShowNsfwModal(false);
-        }}
-        actions={[
-          {
-            variant: 'text',
-            label: t('Cancel'),
-            onClick: () => {
-              setShowNsfwModal(false);
-            },
-          },
-          {
-            variant: 'primary',
-            label: t('I understand'),
-            onClick: () => {
-              if (nsfwFormValues?.nsfw) {
-                onProfileSave(nsfwFormValues);
-                setShowNsfwModal(null);
-              }
-              setShowNsfwModal(false);
-            },
-          },
-        ]}
-      >
-        <Stack direction="column" spacing={4}>
-          <Typography>
-            {t('Before you proceed,')} <Typography variant="h6">{t('please be aware:')}</Typography>
-          </Typography>
-          <Typography>
-            <Typography variant="h6" className="text-errorLight dark:text-errorDark">
-              {t('Irreversible Action:')}{' '}
-            </Typography>
-            {t('Changing your profile to NSFW (Not Safe For Work)')}
-            <br /> {t(
-              'means all current and future posts will be marked as NSFW. This action is',
-            )}{' '}
-            <br />
-            {t('permanent and cannot be undone')}.
-          </Typography>
-          <Typography>
-            <Typography variant="h6" className="text-errorLight dark:text-errorDark">
-              {t('Content Impact: ')}{' '}
-            </Typography>
-            {t('Once your profile is set to NSFW, it will affect how your')} <br />{' '}
-            {t('content is viewed and accessed by others in the community.')}
-          </Typography>
-        </Stack>
-      </Modal>
+      <AlertDialog open={showNsfwModal} onOpenChange={setShowNsfwModal}>
+        <AlertDialogContent className="py-4 px-6 md:px-24">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('Changing to NSFW Profile')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Stack direction="column" spacing={4}>
+                <Typography>
+                  {t('Before you proceed,')}{' '}
+                  <Typography variant="h6">{t('please be aware:')}</Typography>
+                </Typography>
+                <Typography>
+                  <Typography variant="h6" className="text-errorLight dark:text-errorDark">
+                    {t('Irreversible Action:')}{' '}
+                  </Typography>
+                  {t('Changing your profile to NSFW (Not Safe For Work)')}
+                  <br />{' '}
+                  {t(
+                    'means all current and future posts will be marked as NSFW. This action is',
+                  )}{' '}
+                  <br />
+                  {t('permanent and cannot be undone')}.
+                </Typography>
+                <Typography>
+                  <Typography variant="h6" className="text-errorLight dark:text-errorDark">
+                    {t('Content Impact: ')}{' '}
+                  </Typography>
+                  {t('Once your profile is set to NSFW, it will affect how your')} <br />{' '}
+                  {t('content is viewed and accessed by others in the community.')}
+                </Typography>
+              </Stack>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setShowNsfwModal(false);
+              }}
+            >
+              {t('Cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (nsfwFormValues?.nsfw) {
+                  onProfileSave(nsfwFormValues);
+                  setShowNsfwModal(null);
+                }
+                setShowNsfwModal(false);
+              }}
+            >
+              {t('I understand')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Stack>
   );
 };
