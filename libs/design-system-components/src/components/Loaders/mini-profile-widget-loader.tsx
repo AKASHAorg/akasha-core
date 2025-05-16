@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 
 /**
  * Component used to display a skeleton placeholder for data loading
@@ -13,13 +13,13 @@ const MiniProfileWidgetLoader: React.FC = () => {
     <Card className="mb-4 p-0 max-h-[30rem]">
       <Stack alignItems="center" className="bg-inherit h-28 rounded-t-2xl w-full">
         <Stack className="relative top-16">
-          <TextLine round="rounded-full" height="h-20" width="w-20" customStyle="shrink-0" />
+          <Skeleton className="rounded-full h-20 w-20 shrink-0" />
         </Stack>
       </Stack>
       <Stack spacing={4} alignItems="center" className="p-4 pt-6 w-full">
         <Stack spacing={1} alignItems="center" className="pt-3 w-full">
-          <TextLine width="w-3/6" height="h-5" animated />
-          <TextLine width="w-3/6" height="h-5" animated />
+          <Skeleton className="w-3/6 h-5" />
+          <Skeleton className="w-3/6 h-5" />
         </Stack>
         <Stack
           direction="row"
@@ -28,24 +28,18 @@ const MiniProfileWidgetLoader: React.FC = () => {
           spacing={2}
           className="w-full"
         >
-          <TextLine width="w-2/6" height="h-5" animated />
+          <Skeleton className="w-2/6 h-5" />
           <Typography variant="sm" className="font-light text-grey4 dark:text-grey6">
             |
           </Typography>
-          <TextLine width="w-2/6" height="h-5" animated />
+          <Skeleton className="w-2/6 h-5" />
           <Typography variant="sm" className="font-light text-grey4 dark:text-grey6">
             |
           </Typography>
-          <TextLine width="w-2/6" height="h-5" animated />
+          <Skeleton className="w-2/6 h-5" />
         </Stack>
-        <TextLine width="w-full" height="h-5" animated />
-        <TextLine
-          title="followButton"
-          width="w-[5rem]"
-          height="h-[1.5rem]"
-          round="rounded"
-          animated
-        />
+        <Skeleton className="w-full h-5" />
+        <Skeleton title="followButton" className="rounded w-[5rem] [1.5rem]" />
       </Stack>
     </Card>
   );

@@ -5,8 +5,13 @@ import { Tag } from '@akashaorg/typings/lib/ui';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { HashIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import {
+  DuplexButton,
+  DuplexButtonActive,
+  DuplexButtonHover,
+  DuplexButtonInactive,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 import SubtitleTextIcon from '@akashaorg/design-system-core/lib/components/SubtitleTextIcon';
 
 export type TagSearchCardProps = {
@@ -51,29 +56,34 @@ const TagSearchCard: React.FC<TagSearchCardProps> = props => {
               onClick={onClickTag}
               label={tag.name}
               subtitle={`${tag.totalPosts} Beams`}
-              icon={<HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
+              icon={
+                <HashIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+              }
               backgroundColor={true}
             />
           )}
 
           {!tag && (
             <Stack alignItems="center" justifyContent="between" className="py-2">
-              <TextLine title="tagName" animated={false} width="140px" />
-              <TextLine title="tagName" animated={false} width="80px" />
+              <Skeleton title="tagName" className="140px" />
+              <Skeleton title="tagName" className="80px" />
             </Stack>
           )}
         </Stack>
       </Link>
       {tag && (
         <Stack>
-          <DuplexButton
-            inactiveLabel={subscribeLabel}
-            activeLabel={subscribedLabel}
-            activeHoverLabel={unsubscribeLabel}
-            onClickInactive={() => handleSubscribeTag(tag.name)}
-            onClickActive={() => handleUnsubscribeTag(tag.name)}
-            active={subscribedTags?.includes(tag.name)}
-          />
+          <DuplexButton active={subscribedTags?.includes(tag.name)}>
+            <DuplexButtonInactive onClick={() => handleSubscribeTag(tag.name)} variant="outline">
+              {subscribeLabel}
+            </DuplexButtonInactive>
+
+            <DuplexButtonHover variant="destructive" onClick={() => handleUnsubscribeTag(tag.name)}>
+              {unsubscribeLabel}
+            </DuplexButtonHover>
+
+            <DuplexButtonActive variant="outline">{subscribedLabel}</DuplexButtonActive>
+          </DuplexButton>
         </Stack>
       )}
     </Stack>

@@ -1,19 +1,20 @@
 import * as React from 'react';
-import { LayoutGrid, LayoutPanelLeft, Puzzle } from 'lucide-react';
-
-import { cn } from '@/library/utils';
+import { LayoutGridIcon, LayoutPanelLeftIcon, PuzzleIcon } from 'lucide-react';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
+import { cn } from '../library/utils';
 
 const IconByExtension = ({ extensionType }: { extensionType: AkashaAppApplicationType }) => {
+  const style = 'h-3 w-3 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark';
+
   switch (extensionType) {
     case AkashaAppApplicationType.App:
-      return <LayoutGrid />;
+      return <LayoutGridIcon className={style} />;
     case AkashaAppApplicationType.Plugin:
-      return <Puzzle />;
+      return <PuzzleIcon className={style} />;
     case AkashaAppApplicationType.Widget:
-      return <LayoutPanelLeft />;
+      return <LayoutPanelLeftIcon className={style} />;
     default:
-      return <LayoutGrid />;
+      return <LayoutGridIcon />;
   }
 };
 
@@ -28,7 +29,7 @@ const ExtensionTypeIcon = ({
     <div
       data-slot="extension-type-icon"
       className={cn(
-        'flex items-center justify-center size-5 [&_svg]:size-3 text-secondary-foreground rounded-full bg-secondary',
+        'flex items-center justify-center size-5 [&_svg]:size-3 text-secondary-foreground rounded-full bg-trsnaparent',
         className,
       )}
       {...props}
@@ -38,4 +39,4 @@ const ExtensionTypeIcon = ({
   );
 };
 
-export { ExtensionTypeIcon };
+export { ExtensionTypeIcon, IconByExtension };

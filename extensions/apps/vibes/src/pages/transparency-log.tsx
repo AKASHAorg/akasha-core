@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IModerationLogItem } from '@akashaorg/typings/lib/ui';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import {
   Select,
   SelectTrigger,
@@ -84,7 +84,9 @@ export const TransparencyLog: React.FC<unknown> = () => {
             </SelectContent>
           </Select>
         </Stack>
-        <Button variant="text" size="md" label={`${t('Reset')}`} onClick={resetFilters} />
+        <Button variant="link" onClick={resetFilters}>
+          {t('Reset')}
+        </Button>
       </Stack>
 
       {!filteredEntries.length && (

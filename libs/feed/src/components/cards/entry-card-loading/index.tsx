@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import TextLine from '@akashaorg/design-system-core/lib/components/TextLine';
+import { Skeleton } from '@akashaorg/ui/lib/components/skeleton';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileAvatarLoading from '@akashaorg/design-system-core/lib/components/ProfileAvatarButton/ProfileAvatarLoading';
 
@@ -17,17 +17,17 @@ const EntryLoadingPlaceholder: React.FC<
     <Stack spacing={2} className="p-4 grow min-h-[inherit]">
       <Stack direction="row" alignItems="center" justifyContent="between">
         <ProfileAvatarLoading animated={animated} />
-        <TextLine width="w-4" height="h-4" animated={animated} />
+        <Skeleton className="w-4 h-4" />
       </Stack>
       <Stack justifyContent="center" spacing={1}>
-        <TextLine title="entry-publish-date" height="h-4" width="w-full" animated={animated} />
-        <TextLine title="entry-publish-date" height="h-4" width="w-6/12" animated={animated} />
+        <Skeleton title="entry-publish-date" className="w-full h-4" />
+        <Skeleton title="entry-publish-date" className="w-6/12 h-4" />
         {children}
       </Stack>
       <Stack direction="row" justifyContent="center" spacing={4} className="mt-auto ml-auto">
-        <TextLine title="entry-publish-date" height="h-4" width="w-4" animated={animated} />
-        <TextLine title="entry-publish-date" height="h-4" width="w-9" animated={animated} />
-        <TextLine title="entry-publish-date" height="h-4" width="w-14" animated={animated} />
+        <Skeleton title="entry-publish-date" className="w-4 h-4" />
+        <Skeleton title="entry-publish-date" className="w-9 h-4" />
+        <Skeleton title="entry-publish-date" className="w-14 h-4" />
       </Stack>
     </Stack>
   );

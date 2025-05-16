@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
@@ -29,7 +28,7 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
     onClick,
   } = props;
   return (
-    <Button plain={true} onClick={onClick}>
+    <button onClick={onClick}>
       <Card className="p-0 rounded-2xl cursor-pointer">
         <Stack
           justifyContent={isMini ? 'between' : 'evenly'}
@@ -72,7 +71,7 @@ const VibesValueCard: React.FC<VibesValueCardProps> = props => {
           )}
         </Stack>
       </Card>
-    </Button>
+    </button>
   );
 };
 export default VibesValueCard;

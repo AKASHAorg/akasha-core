@@ -22,9 +22,9 @@ import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/
 import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { capitalize } from 'lodash';
 import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 export type HeaderProps = {
   extensionType?: AkashaAppApplicationType;
   nsfw?: boolean;

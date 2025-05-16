@@ -4,7 +4,6 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
-import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
 import {
   ProfileAvatarButton,
   ProfileAvatarButtonAvatar,
@@ -13,6 +12,8 @@ import {
   ProfileDidField,
   ProfileName,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
+
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';

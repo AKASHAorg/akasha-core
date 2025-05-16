@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import {
   PageHeader,
@@ -55,7 +55,9 @@ export const AdminSettings: React.FC<AdminSettingsProps> = props => {
               </Typography>
             </Typography>
           </Stack>
-          <Button variant="text" size="md" label={changeLimitLabel} onClick={onChangeButtonClick} />
+          <Button variant="link" onClick={onChangeButtonClick}>
+            {changeLimitLabel}
+          </Button>
         </Stack>
         <Separator />
         <Stack>

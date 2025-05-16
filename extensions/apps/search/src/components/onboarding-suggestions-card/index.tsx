@@ -1,7 +1,12 @@
 import React from 'react';
 import { Tag, type Image, Profile } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import DuplexButton from '@akashaorg/design-system-core/lib/components/DuplexButton';
+import {
+  DuplexButton,
+  DuplexButtonInactive,
+  DuplexButtonActive,
+  DuplexButtonHover,
+} from '@akashaorg/ui/lib/akasha-components/duplex-button';
 import { UserCircleIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { TagButton } from './tag-button';
@@ -65,7 +70,6 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
     followedProfiles,
     transformSource,
     onClickTag,
-    onClickProfile,
     onClickFollow,
     onClickUnfollow,
     loggedUserDID,
@@ -110,17 +114,24 @@ const OnboardingSuggestionsCard: React.FC<OnboardingSuggestionsCardProps> = prop
                 <ProfileDidField />
               </ProfileAvatarButton>
               {loggedUserDID !== profile?.did?.id && (
-                <DuplexButton
-                  inactiveLabel={followLabel}
-                  activeLabel={followingLabel}
-                  activeHoverLabel={unfollowLabel}
-                  onClickInactive={() => onClickFollow(profile?.did?.id)}
-                  onClickActive={() => onClickUnfollow(profile?.did?.id)}
-                  active={followedProfiles?.includes(profile?.did?.id)}
-                  icon={
+                <DuplexButton active={followedProfiles?.includes(profile?.did?.id)}>
+                  <DuplexButtonInactive
+                    onClick={() => onClickFollow(profile?.did?.id)}
+                    variant="outline"
+                  >
+                    {followLabel}
+                  </DuplexButtonInactive>
+
+                  <DuplexButtonHover
+                    variant="destructive"
+                    onClick={() => onClickUnfollow(profile?.did?.id)}
+                  >
                     <UserCircleIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                  }
-                />
+                    {unfollowLabel}
+                  </DuplexButtonHover>
+
+                  <DuplexButtonActive variant="outline">{followingLabel}</DuplexButtonActive>
+                </DuplexButton>
               )}
             </Stack>
           ))}

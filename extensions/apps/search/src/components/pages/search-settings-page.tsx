@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -104,17 +104,15 @@ const SettingsPage: React.FC = () => {
         customStyle="pr-2 pb-2 pt-32"
       >
         <Button
-          variant="text"
-          label={t('Cancel')}
-          color="secondaryLight dark:secondaryDark"
+          variant="link"
           onClick={cancelHandler}
-        />
-        <Button
-          variant="primary"
-          label={t('Update')}
-          onClick={confirmHandler}
-          disabled={updateButtonDisabled}
-        />
+          className="secondaryLight dark:secondaryDark"
+        >
+          {t('Cancel')}
+        </Button>
+        <Button onClick={confirmHandler} disabled={updateButtonDisabled}>
+          {t('Update')}
+        </Button>
       </Stack>
     </Card>
   );

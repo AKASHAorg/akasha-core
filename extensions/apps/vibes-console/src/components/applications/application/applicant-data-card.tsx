@@ -2,7 +2,7 @@ import React from 'react';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Profile } from '@akashaorg/typings/lib/ui';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
@@ -44,7 +44,6 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
     onClickViewProfile,
     onClickViewApplication,
   } = props;
-  const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
   return (
     <Card className="p-0">
       <Stack padding="p-4" spacing="gap-y-4">
@@ -70,7 +69,7 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
             </Stack>
           </Stack>
 
-          {isMini && <Button label={viewProfileLabel} onClick={onClickViewProfile} />}
+          {isMini && <Button onClick={onClickViewProfile}>{viewProfileLabel}</Button>}
           {!isMini && renderStatusDetail(applicant.status)}
         </Stack>
 
@@ -106,13 +105,9 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
           justify="between"
           customStyle="border-t-1 border-solid border-grey8 dark:border-grey5"
         >
-          <Button label={viewProfileLabel} onClick={onClickViewProfile} />
+          <Button onClick={onClickViewProfile}>{viewProfileLabel}</Button>
           {viewApplicationLabel && (
-            <Button
-              variant="primary"
-              label={viewApplicationLabel}
-              onClick={onClickViewApplication}
-            />
+            <Button onClick={onClickViewApplication}>{viewApplicationLabel}</Button>
           )}
         </Stack>
       )}
