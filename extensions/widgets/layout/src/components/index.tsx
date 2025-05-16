@@ -12,7 +12,6 @@ import {
   startMobileSidebarHidingBreakpoint,
   startWidgetsTogglingBreakpoint,
 } from '@akashaorg/design-system-core/lib/utils/breakpoints';
-import { useClickAway } from 'react-use';
 import { Extension } from '@akashaorg/ui-lib-extensions/lib/react/extension';
 import { Widget } from '@akashaorg/ui-lib-extensions/lib/react/widget';
 import { ModalExtension } from '@akashaorg/ui-lib-extensions/lib/react/modal-extension';
@@ -97,12 +96,6 @@ const Layout: React.FC<unknown> = () => {
   const handleWidgetsHide = () => {
     setshowWidgets(false);
   };
-  const wrapperRef = useRef(null);
-  useClickAway(wrapperRef, () => {
-    _uiEvents.current.next({
-      event: EventTypes.HideSidebar,
-    });
-  });
   useEffect(() => {
     const eventsSub = _uiEvents.current
       .pipe(
@@ -146,10 +139,11 @@ const Layout: React.FC<unknown> = () => {
     }
   };
   const layoutStyle = `grid min-h-full lg:${showWidgets ? 'grid-cols-[8fr_4fr]' : 'grid-cols-[2fr_8fr_2fr]'} ${showSidebar ? 'xl:grid-cols-[3fr_6fr_3fr] ' : 'xl:grid-cols-[1.5fr_6fr_3fr_1.5fr]'} xl:max-w-7xl xl:mx-auto gap-x-3 w-full`;
-  const mobileLayoverStyle = `
-      fixed xl:sticky h-full z-[99] ${showSidebar && window.matchMedia(startMobileSidebarHidingBreakpoint).matches ? 'min-w-[100vw] xl:min-w-max bg-black/30 dark:bg-white/10 z-[99] left-0 right-0' : ''}`;
+
   const sidebarSlotStyle = `
-      sticky top-0 h-screen transition-all duration-200 transform z-[99] ${showSidebar ? 'w-fit translate-x-0' : '-translate-x-full xl:hidden'} ${needSidebarToggling ? 'fixed left-0' : ''}
+      fixed top-4 h-screen transition-all duration-200 transform z-[99] ${
+        showSidebar && 'w-fit translate-x-0'
+      } ${needSidebarToggling ? 'fixed left-0' : ''}
       `;
   return (
     <Stack
@@ -170,25 +164,13 @@ const Layout: React.FC<unknown> = () => {
     >
       <Stack className="h-full m-auto w-full min-h-screen">
         <Stack className={layoutStyle}>
-          <Stack className={mobileLayoverStyle}>
+          <Stack>
             <Stack className={sidebarSlotStyle}>
-              {needSidebarToggling ? (
-                <Stack ref={wrapperRef} className="pt-0 xl:pt-4 h-screen">
-                  <Widget
-                    fullHeight
-                    name={layoutSlots.sidebarSlotId}
-                    loadingIndicator={sidebarLoadingIndicator}
-                  />
-                </Stack>
-              ) : (
-                <Stack className="pt-0 xl:pt-4 h-screen">
-                  <Widget
-                    fullHeight
-                    name={layoutSlots.sidebarSlotId}
-                    loadingIndicator={sidebarLoadingIndicator}
-                  />
-                </Stack>
-              )}
+              <Widget
+                fullHeight
+                name={layoutSlots.sidebarSlotId}
+                loadingIndicator={sidebarLoadingIndicator}
+              />
             </Stack>
           </Stack>
           <Stack className={`px-2 ${showWidgets ? '' : 'lg:col-start-2 lg:col-end-3 col-start-1'}`}>

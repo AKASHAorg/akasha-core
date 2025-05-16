@@ -37148,6 +37148,7 @@ __metadata:
     tsc-alias: "npm:^1.8.10"
     tslib: "npm:2.4.1"
     tsx: "npm:^4.17.0"
+    tw-animate-css: "npm:^1.2.9"
     typescript: "npm:5.6.3"
     uint8arrays: "npm:4.0.4"
     url-loader: "npm:4.1.1"
@@ -40134,6 +40135,13 @@ __metadata:
     proper-lockfile: "npm:^4.1.2"
     url-parse: "npm:^1.5.7"
   checksum: 10/f4c34ff5961b3738f52c8eb052d7174f33582d0cf68cc04d9fb8416a79d84cf04020debd4741205a2af56caf91486db0a438b2df42a1134f8703e3c2d3e8a89a
+  languageName: node
+  linkType: hard
+
+"tw-animate-css@npm:^1.2.9":
+  version: 1.2.9
+  resolution: "tw-animate-css@npm:1.2.9"
+  checksum: 10/06e7666b331045ada382faeddcb76f1e36cc085b27326d1981ef8a379d9135c1fdf9af54ad7d1b1cdb58daa6e46c45885eb2fc41174fd1e2758c082a8429e931
   languageName: node
   linkType: hard
 
