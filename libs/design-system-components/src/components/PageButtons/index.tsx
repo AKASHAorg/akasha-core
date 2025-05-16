@@ -1,15 +1,14 @@
 import React from 'react';
 
-import Button from '@akashaorg/design-system-core/lib/components/Button';
-import { ButtonProps } from '@akashaorg/design-system-core/lib/components/Button/types';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+
+type ButtonProps = React.ComponentProps<typeof Button>;
 
 export type PageButtonsProps = {
   cancelButtonLabel?: string;
   confirmButtonLabel?: string;
-  buttonSize?: ButtonProps['size'];
   cancelButtonVariant?: ButtonProps['variant'];
-  confirmButtonVariant?: ButtonProps['variant'];
   confirmButtonDisabled?: boolean;
   onCancelButtonClick?: () => void;
   onConfirmButtonClick?: () => void;
@@ -22,9 +21,7 @@ export const PageButtons: React.FC<PageButtonsProps> = props => {
   const {
     cancelButtonLabel,
     confirmButtonLabel,
-    buttonSize = 'md',
     cancelButtonVariant,
-    confirmButtonVariant = 'primary',
     confirmButtonDisabled,
     onCancelButtonClick,
     onConfirmButtonClick,
@@ -47,32 +44,20 @@ export const PageButtons: React.FC<PageButtonsProps> = props => {
       {cancelButtonLabel && (
         <>
           {cancelButtonVariant && (
-            <Button
-              size={buttonSize}
-              variant={cancelButtonVariant}
-              label={cancelButtonLabel}
-              onClick={handleCancelButtonClick}
-            />
+            <Button onClick={handleCancelButtonClick}>{cancelButtonLabel}</Button>
           )}
           {!cancelButtonVariant && (
-            <Button
-              variant="text"
-              size={buttonSize}
-              label={cancelButtonLabel}
-              onClick={handleCancelButtonClick}
-            />
+            <Button variant="link" onClick={handleCancelButtonClick}>
+              {cancelButtonLabel}
+            </Button>
           )}
         </>
       )}
 
       {confirmButtonLabel && (
-        <Button
-          size={buttonSize}
-          variant={confirmButtonVariant}
-          label={confirmButtonLabel}
-          disabled={confirmButtonDisabled}
-          onClick={handleConfirmButtonClick}
-        />
+        <Button disabled={confirmButtonDisabled} onClick={handleConfirmButtonClick}>
+          {confirmButtonLabel}
+        </Button>
       )}
     </Stack>
   );

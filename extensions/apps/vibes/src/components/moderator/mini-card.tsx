@@ -1,6 +1,5 @@
 import React from 'react';
 import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
@@ -23,7 +22,6 @@ export type ModeratorDetailMiniCardProps = {
 const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props => {
   const { moderator, hasBorderBottom, tenureInfoLabel, moderatedItemsLabel, onCardClick } = props;
   const borderBottomStyle = `${hasBorderBottom ? 'border-b-1 border-solid border-grey8 dark:border-grey3' : ''}`;
-  const textStyle = 'max-w([12.5rem] md:[7.5rem]) w-fit cursor-default';
   return (
     <Stack padding="py-4" direction="row" customStyle={`flex-none ${borderBottomStyle}`}>
       <Stack
@@ -76,9 +74,9 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
           </Typography>
         </Stack>
 
-        <Button plain={true} onClick={() => onCardClick(moderator.did.id)}>
+        <button onClick={() => onCardClick(moderator.did.id)}>
           <ChevronRightIcon className="h-5 w-5 justify-end [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-        </Button>
+        </button>
       </Stack>
     </Stack>
   );

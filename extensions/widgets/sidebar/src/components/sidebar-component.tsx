@@ -9,7 +9,7 @@ import {
   useRootComponentProps,
 } from '@akashaorg/ui-core-hooks';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ErrorBoundary from '@akashaorg/design-system-core/lib/components/ErrorBoundary';
 import {
@@ -289,13 +289,9 @@ const SidebarComponent: React.FC<unknown> = () => {
                 <Stack direction="row" spacing={4} className="w-fit h-fit mt-6">
                   {modSocialLinks?.map((socialLink, idx) => (
                     <Link key={idx} to={socialLink.link} target="_blank">
-                      <Button
-                        icon={socialLink.icon}
-                        solidIcon={idx > 0}
-                        variant="primary"
-                        greyBg={true}
-                        iconOnly={true}
-                      />
+                      <Button size="icon" variant="outline" className="size-8">
+                        {socialLink.icon}
+                      </Button>
                     </Link>
                   ))}
                 </Stack>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '@akashaorg/design-system-core/lib/components/Button';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -20,14 +20,10 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
     <Stack spacing="gap-y-4">
       <Stack direction="row" justify="between">
         <Typography variant="h5">{titleLabel}</Typography>
-        <Button
-          aria-label="settings"
-          icon={<SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
-          variant="primary"
-          onClick={onSettingsButtonClick}
-          greyBg
-          iconOnly
-        />
+
+        <Button aria-label="settings" size="icon" variant="outline" onClick={onSettingsButtonClick}>
+          <SettingsIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+        </Button>
       </Stack>
 
       <Stack direction="row" justify="between" spacing="gap-x-4">
@@ -41,7 +37,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
           }}
         />
 
-        <Button variant="secondary" label={buttonLabel} />
+        <Button variant="outline">{buttonLabel}</Button>
       </Stack>
     </Stack>
   );
