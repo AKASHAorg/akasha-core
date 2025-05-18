@@ -4732,6 +4732,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@date-fns/tz@npm:1.2.0":
+  version: 1.2.0
+  resolution: "@date-fns/tz@npm:1.2.0"
+  checksum: 10/a9c2d32f98a5a5c655a7d3843046a5a36779b2ef0db803c608291976e6254e594a085777bf738379f50c7e9fc2ffebbf8bb836e9e9759a5ef2b703f91bb785de
+  languageName: node
+  linkType: hard
+
 "@didtools/cacao@npm:3.0.1, @didtools/cacao@npm:^3.0.0, @didtools/cacao@npm:^3.0.1":
   version: 3.0.1
   resolution: "@didtools/cacao@npm:3.0.1"
@@ -12153,7 +12160,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-slot@npm:1.2.2":
+"@radix-ui/react-slot@npm:1.2.2, @radix-ui/react-slot@npm:^1.2.2":
   version: 1.2.2
   resolution: "@radix-ui/react-slot@npm:1.2.2"
   dependencies:
@@ -21893,6 +21900,20 @@ __metadata:
   version: 2.4.3
   resolution: "date-and-time@npm:2.4.3"
   checksum: 10/babed9d1191296024aedc72a1b535398b9f0aaafcc596bdbffac770ea864b8780745d689ceb962acf413321535a35176591e28ca7da2fbf313affd64c59232ec
+  languageName: node
+  linkType: hard
+
+"date-fns-jalali@npm:4.1.0-0":
+  version: 4.1.0-0
+  resolution: "date-fns-jalali@npm:4.1.0-0"
+  checksum: 10/0005e0e37d449aa998cfc353395b0292eea4778aba4283dad4fa0e3559cf0a7fc7ce9123fb6f22c235285219d4f4774c88bb9c01fa2694c6a5efbbcd33efe7fc
+  languageName: node
+  linkType: hard
+
+"date-fns@npm:4.1.0, date-fns@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "date-fns@npm:4.1.0"
+  checksum: 10/d5f6e9de5bbc52310f786099e18609289ed5e30af60a71e0646784c8185ddd1d0eebcf7c96b7faaaefc4a8366f3a3a4244d099b6d0866ee2bec80d1361e64342
   languageName: node
   linkType: hard
 
@@ -35575,6 +35596,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-day-picker@npm:^9.7.0":
+  version: 9.7.0
+  resolution: "react-day-picker@npm:9.7.0"
+  dependencies:
+    "@date-fns/tz": "npm:1.2.0"
+    date-fns: "npm:4.1.0"
+    date-fns-jalali: "npm:4.1.0-0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/8755db4a978e10f1b35cfa23d544523682f3f18c97357e3774f43a6e223cdfaa9218537a683cf45fe72cd1e2e0a1fab3d55957815b8b23ef118220509f57a359
+  languageName: node
+  linkType: hard
+
 "react-docgen-typescript@npm:2.2.2, react-docgen-typescript@npm:^2.2.2":
   version: 2.2.2
   resolution: "react-docgen-typescript@npm:2.2.2"
@@ -36967,7 +37001,7 @@ __metadata:
     "@radix-ui/react-radio-group": "npm:1.3.6"
     "@radix-ui/react-select": "npm:2.1.5"
     "@radix-ui/react-separator": "npm:1.1.1"
-    "@radix-ui/react-slot": "npm:1.1.1"
+    "@radix-ui/react-slot": "npm:^1.2.2"
     "@radix-ui/react-switch": "npm:1.1.2"
     "@radix-ui/react-tabs": "npm:1.1.2"
     "@radix-ui/react-tooltip": "npm:1.1.7"
@@ -37034,6 +37068,7 @@ __metadata:
     core-js: "npm:3.36.1"
     crypto-hash: "npm:^3.0.0"
     css-loader: "npm:6.7.2"
+    date-fns: "npm:^4.1.0"
     dayjs: "npm:1.11.7"
     dexie: "npm:3.2.3"
     did-jwt: "npm:8.0.4"
@@ -37102,6 +37137,7 @@ __metadata:
     process: "npm:0.11.10"
     quick-lru: "npm:6.1.1"
     react: "npm:18.3.1"
+    react-day-picker: "npm:^9.7.0"
     react-docgen-typescript: "npm:2.2.2"
     react-dom: "npm:18.3.1"
     react-dropzone: "npm:14.2.3"
@@ -37148,6 +37184,7 @@ __metadata:
     tsc-alias: "npm:^1.8.10"
     tslib: "npm:2.4.1"
     tsx: "npm:^4.17.0"
+    tw-animate-css: "npm:^1.2.9"
     typescript: "npm:5.6.3"
     uint8arrays: "npm:4.0.4"
     url-loader: "npm:4.1.1"
@@ -40134,6 +40171,13 @@ __metadata:
     proper-lockfile: "npm:^4.1.2"
     url-parse: "npm:^1.5.7"
   checksum: 10/f4c34ff5961b3738f52c8eb052d7174f33582d0cf68cc04d9fb8416a79d84cf04020debd4741205a2af56caf91486db0a438b2df42a1134f8703e3c2d3e8a89a
+  languageName: node
+  linkType: hard
+
+"tw-animate-css@npm:^1.2.9":
+  version: 1.2.9
+  resolution: "tw-animate-css@npm:1.2.9"
+  checksum: 10/06e7666b331045ada382faeddcb76f1e36cc085b27326d1981ef8a379d9135c1fdf9af54ad7d1b1cdb58daa6e46c45885eb2fc41174fd1e2758c082a8429e931
   languageName: node
   linkType: hard
 

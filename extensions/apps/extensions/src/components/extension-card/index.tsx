@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import AppCoverImage from '@akashaorg/design-system-core/lib/components/AppCoverImage';
+import AppCoverImage from '@akashaorg/design-system-components/lib/components/AppCoverImage';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import {
   ProfileAvatarButton,
   ProfileAvatarButtonAvatar,
@@ -69,43 +69,21 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             <>{action}</>
           </Stack>
           <Stack direction="row" spacing={2}>
-            <Pill
-              color={{
-                light: 'secondaryLight',
-                dark: 'white',
-              }}
-              icon={<ExtensionTypeIcon extensionType={applicationType} className="h-3 w-3" />}
-              weight="normal"
-              size="xs"
-              label={extensionTypeLabel}
-              type="info"
-              customStyle="bg-tertiaryLight dark:bg-tertiaryDark"
-            />
+            <Badge variant="secondary" className="px-1 py-0">
+              <Stack direction="row" spacing={1} alignItems="center">
+                <ExtensionTypeIcon extensionType={applicationType} />
+                <Typography variant="xs">{extensionTypeLabel}</Typography>
+              </Stack>
+            </Badge>
             {isDefaultWorldExtension && (
-              <Pill
-                color={{
-                  light: 'white',
-                  dark: 'black',
-                }}
-                weight="normal"
-                size="xs"
-                label={defaultLabel}
-                type="info"
-                customStyle="bg-secondaryLight dark:bg-secondaryDark"
-              />
+              <Badge variant="outline">
+                <Typography variant="xs">{defaultLabel}</Typography>
+              </Badge>
             )}
             {nsfw && (
-              <Pill
-                color={{
-                  light: 'errorLight',
-                  dark: 'white',
-                }}
-                weight="normal"
-                size="xs"
-                label={nsfwLabel}
-                type="info"
-                customStyle="bg-errorFade dark:bg-errorDark"
-              />
+              <Badge variant="destructive">
+                <Typography variant="xs">{nsfwLabel}</Typography>
+              </Badge>
             )}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>

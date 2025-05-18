@@ -11,15 +11,15 @@ import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension
 
 import Label from '@akashaorg/design-system-core/lib/components/Label';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Section from './section';
 import { AppInfoPill } from '../app-info/info-pill';
 import ExtensionImageGallery from '../extension-image-gallery';
 import { Extension, Image } from '@akashaorg/typings/lib/ui';
-import AppAvatar from '@akashaorg/design-system-core/lib/components/AppAvatar';
+import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import { CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
@@ -306,7 +306,9 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
               <AccordionContent>
                 <Stack direction="row" spacing={2} className="flex-wrap">
                   {extensionData?.keywords?.map((tag, idx) => (
-                    <Pill key={tag + idx} label={tag} type="action" />
+                    <Badge key={tag + idx} variant="outline">
+                      <Typography variant="xs">{tag}</Typography>
+                    </Badge>
                   ))}
                 </Stack>
               </AccordionContent>
