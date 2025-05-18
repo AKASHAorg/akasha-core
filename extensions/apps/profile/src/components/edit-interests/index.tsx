@@ -9,9 +9,9 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/tags-input';
 import { CheckIcon, XIcon } from 'lucide-react';
 import { CircleX } from 'lucide-react';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import UnsavedChangesModal from '@akashaorg/design-system-components/lib/components/UnsavedChangesModal';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -151,6 +151,8 @@ const EditInterests: React.FC<EditInterestsProps> = ({
 
   const handleModalClose = () => setNewUrl(null);
 
+  const [hoveredInterest, setHoveredInterest] = useState<string | null>(null);
+
   return (
     <form className={`h-full ${customStyle}`}>
       {!!newUrl && (
@@ -179,26 +181,41 @@ const EditInterests: React.FC<EditInterestsProps> = ({
           </Typography>
           <Stack direction="row" spacing={2} className="flex-wrap mt-2">
             {[...allMyInterests].map((interest, index) => (
-              <Pill
+              <button
+                type="button"
                 key={`${index}-${interest.value}`}
-                label={interest.value}
-                icon={myActiveInterests.has(interest) ? <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> : null}
-                iconDirection="right"
-                active={myActiveInterests.has(interest)}
-                hover={
-                  myActiveInterests.has(interest)
-                    ? { icon: <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />, active: false }
-                    : null
-                }
-                onPillClick={active => {
-                  if (active) {
+                onClick={() => {
+                  if (!myActiveInterests.has(interest)) {
                     updateMyActiveInterests(interest);
                     return;
                   }
                   updateMyActiveInterests(interest, true);
                 }}
-                type="action"
-              />
+              >
+                <Badge
+                  variant={
+                    !myActiveInterests.has(interest) || hoveredInterest === interest.value
+                      ? 'outline'
+                      : 'default'
+                  }
+                  onMouseEnter={() => {
+                    setHoveredInterest(interest.value);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredInterest(null);
+                  }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography variant="xs">{interest.value}</Typography>
+                    {myActiveInterests.has(interest) &&
+                      (hoveredInterest === interest.value ? (
+                        <XIcon size={14} />
+                      ) : (
+                        <CheckIcon size={14} />
+                      ))}
+                  </Stack>
+                </Badge>
+              </button>
             ))}
           </Stack>
         </Stack>

@@ -12,7 +12,6 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { ChevronRightIcon, XIcon, Loader2 } from 'lucide-react';
 import {
   InfiniteScroll,
@@ -36,6 +35,7 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import Modal from '@akashaorg/design-system-core/lib/components/Modal';
 import { ApolloError, NetworkStatus } from '@apollo/client';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 const ENTRY_HEIGHT = 82;
 type ExtensionReleaseManagerPageProps = {
   extensionId: string;
@@ -376,14 +376,9 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                                 {`Release ${releaseData?.version}`}
                               </Typography>
                               {itemIndex === 0 && (
-                                <Pill
-                                  type="info"
-                                  borderColor={{
-                                    light: 'secondaryLight',
-                                    dark: 'secondaryDark',
-                                  }}
-                                  label={t('Current')}
-                                />
+                                <Badge variant="outline">
+                                  <Typography variant="xs">{t('Current')}</Typography>
+                                </Badge>
                               )}
                             </Stack>
                             <Typography variant="xs" className="font-medium">

@@ -1,5 +1,5 @@
 import React from 'react';
-import DatePicker from '@akashaorg/design-system-core/lib/components/DatePicker';
+import { Calendar } from '@akashaorg/ui/lib/akasha-components/calendar';
 import {
   PageHeaderProps,
   PageHeader,
@@ -73,7 +73,7 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
               </RadioGroup>
             </Stack>
             {/* show date picker if selectedPeriod is 'Other' */}
-            {selectedPeriod === 'Other' && <DatePicker placeholderLabel={datePlaceholderLabel} />}
+            {selectedPeriod === 'Other' && <Calendar />}
           </Stack>
         )}
 

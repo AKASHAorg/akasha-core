@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppCoverImage from '@akashaorg/design-system-components/lib/components/AppCoverImage';
 import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
@@ -21,7 +22,6 @@ import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/
 import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { capitalize } from 'lodash';
 import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
 
@@ -322,26 +322,16 @@ export const Header: React.FC<HeaderProps> = ({
             alignItems="center"
             className="absolute right-0 -bottom-8"
           >
-            <Pill
-              type="info"
-              label={capitalize(extensionType?.toLowerCase())}
-              icon={<ExtensionTypeIcon extensionType={extensionType} className="h-4 w-4" />}
-              color={{
-                light: 'secondaryLight',
-                dark: 'secondaryDark',
-              }}
-              customStyle="py-0.5 bg-tertiaryLight dark:bg-tertiaryDark"
-            />
+            <Badge variant="outline">
+              <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography variant="xs">{capitalize(extensionType?.toLowerCase())}</Typography>
+                <ExtensionTypeIcon extensionType={extensionType} />
+              </Stack>
+            </Badge>
             {nsfw && (
-              <Pill
-                type="info"
-                label={'NSFW'}
-                color={{
-                  light: 'errorDark',
-                  dark: 'white',
-                }}
-                customStyle="py-0.5 bg-errorFade dark:bg-errorDark"
-              />
+              <Badge variant="destructive">
+                <Typography variant="xs">NSFW</Typography>
+              </Badge>
             )}
           </Stack>
         )}
