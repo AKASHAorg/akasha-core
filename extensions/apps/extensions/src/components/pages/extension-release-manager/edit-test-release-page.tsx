@@ -189,8 +189,8 @@ export const EditTestReleasePage: React.FC<EditTestReleasePageProps> = ({
   return (
     <>
       <AlertDialog defaultOpen={isLoadingTestMode}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
+        <AlertDialogContent className="sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
             <AlertDialogDescription>
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <Typography variant="sm" className="px-4 py-2">

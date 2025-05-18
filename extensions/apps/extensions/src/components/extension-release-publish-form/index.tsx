@@ -18,8 +18,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ButtonType } from '@akashaorg/design-system-components/lib/components/types/common.types';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -230,16 +228,18 @@ const ExtensionReleasePublish: React.FC<ExtensionReleasePublishProps> = props =>
         </Stack>
       </form>
       <AlertDialog open={showConfirmationModal} onOpenChange={onConfirmationModalClose}>
-        <AlertDialogContent className="max-w-[615px]">
-          <AlertDialogHeader>
+        <AlertDialogContent className="max-w-[615px] sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
             <AlertDialogTitle>{confirmationModalTitleLabel}</AlertDialogTitle>
             <AlertDialogDescription>
               <Typography>{confirmationModalDescriptionLabel}</Typography>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={onConfirmationModalClose}>{cancelLabel}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleSave}>{confirmLabel}</AlertDialogAction>
+          <AlertDialogFooter className="sm:justify-center">
+            <Button variant="outline" onClick={onConfirmationModalClose}>
+              {cancelLabel}
+            </Button>
+            <Button onClick={handleSave}>{confirmLabel}</Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

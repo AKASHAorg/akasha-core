@@ -33,8 +33,6 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -409,8 +407,8 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         )}
       </Stack>
       <AlertDialog open={showModal} onOpenChange={handleModalClose}>
-        <AlertDialogContent className="py-4 px-6 md:px-24">
-          <AlertDialogHeader>
+        <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
             <AlertDialogTitle>{t('Release Cannot Be Published')}</AlertDialogTitle>
             <AlertDialogDescription>
               <Stack className="max-w-[567px]">
@@ -422,11 +420,11 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
               </Stack>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleModalClose}>{t('Cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handlePublishExtensionNav}>
-              {t('Publish Extension')}
-            </AlertDialogAction>
+          <AlertDialogFooter className="sm:justify-center">
+            <Button variant="outline" onClick={handleModalClose}>
+              {t('Cancel')}
+            </Button>
+            <Button onClick={handlePublishExtensionNav}>{t('Publish Extension')}</Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

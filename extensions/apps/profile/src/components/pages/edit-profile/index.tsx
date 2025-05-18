@@ -3,8 +3,6 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -34,6 +32,7 @@ import {
 import { getAvatarImage, getCoverImage } from './get-profile-images';
 import { selectProfileData } from '@akashaorg/ui-core-hooks/lib/selectors/get-profile-by-did-query';
 import EditProfile from '../../edit-profile';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 type EditProfilePageProps = {
   profileDID: string;
 };
@@ -325,8 +324,8 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
         />
       </Card>
       <AlertDialog open={showNsfwModal} onOpenChange={setShowNsfwModal}>
-        <AlertDialogContent className="py-4 px-6 md:px-24">
-          <AlertDialogHeader>
+        <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
             <AlertDialogTitle>{t('Changing to NSFW Profile')}</AlertDialogTitle>
             <AlertDialogDescription>
               <Stack direction="column" spacing={4}>
@@ -356,15 +355,16 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               </Stack>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel
+          <AlertDialogFooter className="sm:justify-center">
+            <Button
+              variant="outline"
               onClick={() => {
                 setShowNsfwModal(false);
               }}
             >
               {t('Cancel')}
-            </AlertDialogCancel>
-            <AlertDialogAction
+            </Button>
+            <Button
               onClick={() => {
                 if (nsfwFormValues?.nsfw) {
                   onProfileSave(nsfwFormValues);
@@ -374,7 +374,7 @@ const EditProfilePage: React.FC<EditProfilePageProps> = props => {
               }}
             >
               {t('I understand')}
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

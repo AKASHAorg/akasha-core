@@ -1,14 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@akashaorg/ui/lib/components/alert-dialog';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
@@ -20,11 +19,13 @@ import { ZoomOutIcon, ZoomInIcon } from 'lucide-react';
 import { getCroppedImage } from './get-cropped-image';
 import { XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
 const ZOOM_STEP = 0.01;
 const CROPPER_WIDTH = 320;
 const CROPPER_HEIGHT = 224;
+
 export type ImageModalProps = {
   title: { label: string };
   show: boolean;
@@ -118,8 +119,8 @@ const ImageModal: React.FC<ImageModalProps> = ({
     : '';
   return (
     <AlertDialog open={show} onOpenChange={onClose}>
-      <AlertDialogContent className="py-4 px-6 md:px-24">
-        <AlertDialogHeader>
+      <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+        <AlertDialogHeader className="sm:text-center">
           <AlertDialogTitle>{title?.label}</AlertDialogTitle>
           <AlertDialogDescription>
             {images?.length >= 2 && (
@@ -204,12 +205,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className={`${rightAlignActions ? 'justify-end' : 'justify-center'}`}>
-          <AlertDialogCancel disabled={isSavingImage} onClick={onClose}>
+          <Button variant="outline" disabled={isSavingImage} onClick={onClose}>
             {cancelLabel}
-          </AlertDialogCancel>
-          <AlertDialogAction disabled={showCropError} onClick={handleSaveClick}>
+          </Button>
+          <Button disabled={showCropError} onClick={handleSaveClick}>
             {saveLabel}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

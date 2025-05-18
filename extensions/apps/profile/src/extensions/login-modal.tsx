@@ -4,8 +4,6 @@ import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -14,6 +12,7 @@ import {
 } from '@akashaorg/ui/lib/components/alert-dialog';
 import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/ui-core-hooks';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 const LoginModal = () => {
   const { t } = useTranslation('app-profile');
   const location = window.location;
@@ -52,8 +51,8 @@ const LoginModal = () => {
   };
   return (
     <AlertDialog open={modalData?.name === 'login'} onOpenChange={handleModalClose}>
-      <AlertDialogContent className="py-4 px-6 md:px-24">
-        <AlertDialogHeader>
+      <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+        <AlertDialogHeader className="sm:text-center">
           <AlertDialogTitle>
             {t('{{messageTitle}}', {
               messageTitle: messageTitle?.current,
@@ -70,9 +69,13 @@ const LoginModal = () => {
             </Stack>
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleModalClose}>{t('Cancel')}</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConnectClick}>{t('Connect')}</AlertDialogAction>
+        <AlertDialogFooter className="sm:justify-center">
+          <Button variant="outline" className="rounded-xl" onClick={handleModalClose}>
+            {t('Cancel')}
+          </Button>
+          <Button className="rounded-xl" onClick={handleConnectClick}>
+            {t('Connect')}
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

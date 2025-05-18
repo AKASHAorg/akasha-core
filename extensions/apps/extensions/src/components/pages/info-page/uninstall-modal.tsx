@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import getSDK from '@akashaorg/core-sdk';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -16,6 +14,7 @@ import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { useTranslation } from 'react-i18next';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 enum UninstallModalStates {
   CONFIRMATION = 'confirmation',
   LOADING = 'loading',
@@ -119,8 +118,8 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
         }
       }}
     >
-      <AlertDialogContent className="w-80 md:w-[38rem] md:px-6">
-        <AlertDialogHeader>
+      <AlertDialogContent className="w-80 md:w-[38rem] md:px-6 sm:rounded-3xl border-none bg-card">
+        <AlertDialogHeader className="sm:text-center">
           <AlertDialogTitle>{modalProps?.title?.label}</AlertDialogTitle>
 
           <AlertDialogDescription>
@@ -159,16 +158,16 @@ export const UninstallModal: React.FC<UninstallModalProps> = props => {
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="sm:justify-center">
           {modalProps?.actions?.secondary && (
-            <AlertDialogCancel onClick={modalProps?.actions?.secondary?.onClick}>
+            <Button variant="outline" onClick={modalProps?.actions?.secondary?.onClick}>
               {modalProps?.actions?.secondary?.label}
-            </AlertDialogCancel>
+            </Button>
           )}
           {modalProps?.actions?.primary && (
-            <AlertDialogAction onClick={modalProps?.actions?.primary?.onClick}>
+            <Button onClick={modalProps?.actions?.primary?.onClick}>
               {modalProps?.actions?.primary?.label}
-            </AlertDialogAction>
+            </Button>
           )}
         </AlertDialogFooter>
       </AlertDialogContent>

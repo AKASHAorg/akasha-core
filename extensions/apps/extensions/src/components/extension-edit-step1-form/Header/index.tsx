@@ -382,8 +382,8 @@ export const Header: React.FC<HeaderProps> = ({
         onClose={() => setShowDeleteImage(false)}
       />
       <AlertDialog open={showLogoGuidelineModal} onOpenChange={setShowLogoGuidelineModal}>
-        <AlertDialogContent className="py-4 px-6 md:px-24">
-          <AlertDialogHeader>
+        <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
             <AlertDialogTitle>{logoGuidelines.titleLabel}</AlertDialogTitle>
             <AlertDialogDescription>
               <Stack alignItems="center" spacing={4} className="p-4">

@@ -4,8 +4,6 @@ import ImageOverlay from '@akashaorg/design-system-components/lib/components/Ima
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -29,6 +27,7 @@ import { useAtom } from 'jotai';
 import { AtomContext as EditLocalAtomContext, FormData } from '../main-page';
 import { AtomContext as EditPublishedAtomContext } from '../../extension-edit-published-page/main-page';
 import { MAX_GALLERY_IMAGES, MAX_UPLOAD_RETRIES } from '../../../../constants';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 type ExtensionGalleryManagerPageProps = {
   type: 'local' | 'published';
   extensionId: string;
@@ -291,8 +290,8 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
         </>
       )}
       <AlertDialog open={showDeleteModal} onOpenChange={onDeleteModalClose}>
-        <AlertDialogContent className="max-w-[615px]">
-          <AlertDialogHeader>
+        <AlertDialogContent className="max-w-[615px] sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
             <AlertDialogTitle>{t('Delete Image')}</AlertDialogTitle>
             <AlertDialogDescription>
               <Typography>
@@ -300,11 +299,11 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
               </Typography>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={onDeleteModalClose}>{t('Cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={() => onDeleteConfirmed(selectedImage.id)}>
-              {t('Delete')}
-            </AlertDialogAction>
+          <AlertDialogFooter className="sm:justify-center">
+            <Button variant="outline" onClick={onDeleteModalClose}>
+              {t('Cancel')}
+            </Button>
+            <Button onClick={() => onDeleteConfirmed(selectedImage.id)}>{t('Delete')}</Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

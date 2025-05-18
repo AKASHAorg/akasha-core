@@ -3,8 +3,6 @@ import { useRootComponentProps, withProviders, useModalData } from '@akashaorg/u
 import { IRootExtensionProps } from '@akashaorg/typings/lib/ui';
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -15,6 +13,7 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import { useUpdateBeamMutation } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import getSDK from '@akashaorg/core-sdk';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 const Component: React.FC<IRootExtensionProps> = () => {
   const sdk = getSDK();
   const { t } = useTranslation();
@@ -50,8 +49,8 @@ const Component: React.FC<IRootExtensionProps> = () => {
       open={modalData?.name === 'remove-beam-confirmation'}
       onOpenChange={handleModalClose}
     >
-      <AlertDialogContent className="py-4 px-6 md:px-24">
-        <AlertDialogHeader>
+      <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+        <AlertDialogHeader className="sm:text-center">
           {!isQueryCalled && (
             <AlertDialogTitle>{t('Are you sure you want to remove this beam?')}</AlertDialogTitle>
           )}
@@ -70,13 +69,13 @@ const Component: React.FC<IRootExtensionProps> = () => {
               )}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isQueryCalled} onClick={handleModalClose}>
+        <AlertDialogFooter className="sm:justify-center">
+          <Button variant="outline" disabled={isQueryCalled} onClick={handleModalClose}>
             {t('Cancel')}
-          </AlertDialogCancel>
-          <AlertDialogAction disabled={isQueryCalled} onClick={handleRemove}>
+          </Button>
+          <Button disabled={isQueryCalled} onClick={handleRemove}>
             {t('Remove')}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
