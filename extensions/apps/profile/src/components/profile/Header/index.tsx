@@ -10,6 +10,7 @@ import {
 } from '@akashaorg/ui/lib/components/dropdown-menu';
 import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import {
   Tooltip,
   TooltipTrigger,
@@ -19,7 +20,6 @@ import {
 import { SettingsIcon, EllipsisVerticalIcon } from 'lucide-react';
 import { getImageFromSeed } from '@akashaorg/design-system-core/lib/utils';
 import type { Image, Profile } from '@akashaorg/typings/lib/ui';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
 import {
@@ -33,6 +33,7 @@ import {
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
+import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -155,12 +156,9 @@ const Header: React.FC<HeaderProps> = ({
                   <TooltipProvider delayDuration={0} key={badge.label}>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Pill
-                          label={badge.label}
-                          color={{ light: 'errorDark2', dark: 'white' }}
-                          customStyle="px-2 bg-errorFade dark:bg-errorDark2"
-                          type="info"
-                        />
+                        <Badge variant="destructive" className="px-2">
+                          <Typography variant="xs">{badge.label}</Typography>
+                        </Badge>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">{badge.toolTipLabel}</TooltipContent>
                     </Tooltip>
