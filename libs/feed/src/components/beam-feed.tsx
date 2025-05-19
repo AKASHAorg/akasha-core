@@ -13,7 +13,11 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+  ScrollRestoration,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
@@ -35,10 +39,10 @@ export type BeamFeedProps = {
   filters?: AkashaBeamFiltersInput;
   sorting?: AkashaBeamSortingInput;
   estimatedHeight?: number;
-  itemSpacing?: number;
   scrollOptions?: {
     overScan: number;
   };
+  itemSpacing?: number;
   dataTestId?: string;
   scrollTopIndicator?: (listRect: DOMRect, onScrollToTop: () => void) => React.ReactNode;
   loadingIndicator?: () => ReactElement;
@@ -172,14 +176,12 @@ const BeamFeed = (props: BeamFeedProps) => {
       )}
       {beams && (
         <div ref={vListContainerRef}>
-          <DynamicInfiniteScroll
-            dataTestId={dataTestId}
+          <InfiniteScroll
+            data-testid={dataTestId}
             count={beams.length}
-            scrollRestorationStorageKey={scrollRestorationStorageKey}
-            enableScrollRestoration={true}
             estimatedHeight={estimatedHeight}
+            gap={itemSpacing}
             overScan={scrollOptions.overScan}
-            itemSpacing={itemSpacing}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
             loading={beamStreamQuery.loading}
             onLoadMore={async () => {
@@ -195,13 +197,17 @@ const BeamFeed = (props: BeamFeedProps) => {
                 });
               }
             }}
-            customStyle="mb-4"
+            className="mb-4"
           >
-            {({ itemIndex }) => {
-              const beam = beams[itemIndex];
-              return renderItem(beam.node);
-            }}
-          </DynamicInfiniteScroll>
+            <ScrollRestoration scrollConfigStorageKey={scrollRestorationStorageKey}>
+              <InfiniteScrollList>
+                {itemIndex => {
+                  const beam = beams[itemIndex];
+                  return renderItem(beam.node);
+                }}
+              </InfiniteScrollList>
+            </ScrollRestoration>
+          </InfiniteScroll>
         </div>
       )}
     </>

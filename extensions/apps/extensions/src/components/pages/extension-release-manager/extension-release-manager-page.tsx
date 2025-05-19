@@ -13,7 +13,10 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { ChevronRightIcon, XIcon, Loader2 } from 'lucide-react';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated';
@@ -342,11 +345,11 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
         )}
         {appReleases?.length > 0 && (
           <Card className="p-4">
-            <DynamicInfiniteScroll
+            <InfiniteScroll
               count={appReleases?.length}
               estimatedHeight={ENTRY_HEIGHT}
+              gap={16}
               overScan={1}
-              itemSpacing={16}
               hasNextPage={pageInfo && pageInfo?.hasNextPage}
               loading={loadingAppsReleasesQuery}
               onLoadMore={() => {
@@ -357,38 +360,40 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                 });
               }}
             >
-              {({ itemIndex }) => {
-                const releaseData = appReleases[itemIndex]?.node;
-                const createdAt = releaseData
-                  ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale)
-                  : '';
-                return (
-                  <Stack spacing={4}>
-                    <button onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
-                      <Stack direction="row" justifyContent="between" alignItems="center">
-                        <Stack spacing={4}>
-                          <Stack direction="row" spacing={2} alignItems="center">
-                            <Typography variant="sm" className="font-semibold">
-                              {`Release ${releaseData?.version}`}
+              <InfiniteScrollList>
+                {itemIndex => {
+                  const releaseData = appReleases[itemIndex]?.node;
+                  const createdAt = releaseData
+                    ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale)
+                    : '';
+                  return (
+                    <Stack spacing={4}>
+                      <button onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
+                        <Stack direction="row" justifyContent="between" alignItems="center">
+                          <Stack spacing={4}>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <Typography variant="sm" className="font-semibold">
+                                {`Release ${releaseData?.version}`}
+                              </Typography>
+                              {itemIndex === 0 && (
+                                <Badge variant="outline">
+                                  <Typography variant="xs">{t('Current')}</Typography>
+                                </Badge>
+                              )}
+                            </Stack>
+                            <Typography variant="xs" className="font-medium">
+                              {createdAt}
                             </Typography>
-                            {itemIndex === 0 && (
-                              <Badge variant="outline">
-                                <Typography variant="xs">{t('Current')}</Typography>
-                              </Badge>
-                            )}
                           </Stack>
-                          <Typography variant="xs" className="font-medium">
-                            {createdAt}
-                          </Typography>
+                          <ChevronRightIcon className="h-8 w-8 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                         </Stack>
-                        <ChevronRightIcon className="h-8 w-8 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                      </Stack>
-                    </button>
-                    {itemIndex < appReleases?.length - 1 && <Separator />}
-                  </Stack>
-                );
-              }}
-            </DynamicInfiniteScroll>
+                      </button>
+                      {itemIndex < appReleases?.length - 1 && <Separator />}
+                    </Stack>
+                  );
+                }}
+              </InfiniteScrollList>
+            </InfiniteScroll>
           </Card>
         )}
       </Stack>
