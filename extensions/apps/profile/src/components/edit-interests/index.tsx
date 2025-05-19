@@ -206,7 +206,7 @@ const EditInterests: React.FC<EditInterestsProps> = ({
                   }}
                 >
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    <Typography variant="xs">{interest.value}</Typography>
+                    {interest.value}
                     {myActiveInterests.has(interest) &&
                       (hoveredInterest === interest.value ? (
                         <XIcon size={14} />

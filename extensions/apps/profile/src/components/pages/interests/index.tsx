@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import { CheckIcon, Pill } from 'lucide-react';
+import { CheckIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -188,7 +188,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
                   >
                     <Badge key={`${idx}-${interest}`} variant={isActive ? 'default' : 'outline'}>
                       <Stack direction="row" alignItems="center" spacing={2}>
-                        <Typography variant="xs">{interest.value}</Typography>
+                        {interest.value}
                         {isActive && <CheckIcon size={14} />}
                       </Stack>
                     </Badge>

@@ -72,19 +72,11 @@ const ExtensionCard: React.FC<ExtensionCardProps> = props => {
             <Badge variant="secondary" className="px-1 py-0">
               <Stack direction="row" spacing={1} alignItems="center">
                 <ExtensionTypeIcon extensionType={applicationType} />
-                <Typography variant="xs">{extensionTypeLabel}</Typography>
+                {extensionTypeLabel}
               </Stack>
             </Badge>
-            {isDefaultWorldExtension && (
-              <Badge variant="outline">
-                <Typography variant="xs">{defaultLabel}</Typography>
-              </Badge>
-            )}
-            {nsfw && (
-              <Badge variant="destructive">
-                <Typography variant="xs">{nsfwLabel}</Typography>
-              </Badge>
-            )}
+            {isDefaultWorldExtension && <Badge variant="outline">{defaultLabel}</Badge>}
+            {nsfw && <Badge variant="destructive">{nsfwLabel}</Badge>}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={2}>
             <ProfileAvatarButton profileDID={author?.profileDID} size="sm">

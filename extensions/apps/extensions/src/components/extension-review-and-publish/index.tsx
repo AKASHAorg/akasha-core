@@ -307,7 +307,7 @@ const ExtensionReviewAndPublish: React.FC<ExtensionReviewAndPublishProps> = prop
                 <Stack direction="row" spacing={2} className="flex-wrap">
                   {extensionData?.keywords?.map((tag, idx) => (
                     <Badge key={tag + idx} variant="outline">
-                      <Typography variant="xs">{tag}</Typography>
+                      {tag}
                     </Badge>
                   ))}
                 </Stack>

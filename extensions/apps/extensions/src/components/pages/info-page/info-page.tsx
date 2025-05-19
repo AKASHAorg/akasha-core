@@ -452,7 +452,7 @@ export const InfoPage: React.FC<InfoPageProps> = ({ appId }) => {
                     <Stack direction="row" spacing={2}>
                       {appData.keywords?.map((keyword, idx) => (
                         <Badge key={`${keyword}_${idx}`} variant="outline">
-                          <Typography variant="xs">{keyword}</Typography>
+                          {keyword}
                         </Badge>
                       ))}
                     </Stack>
