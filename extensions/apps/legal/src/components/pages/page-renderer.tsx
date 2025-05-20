@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import MarkdownCard from '@akashaorg/design-system-components/lib/components/MarkdownCard';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Loader2 } from 'lucide-react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type PageRendererProps = {
@@ -33,7 +33,7 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
         <Typography bold>{title}</Typography>
       </Stack>
       <Stack className="p-4">
-        {!doc && <Spinner />}
+        {!doc && <Loader2 className="h-8 w-8 animate-spin text-primary" />}
         {doc && <MarkdownCard mdText={doc} />}
       </Stack>
     </Card>

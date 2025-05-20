@@ -4,11 +4,11 @@ import { useNavigate } from '@tanstack/react-router';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { Tabs, TabsList, TabsTrigger } from '@akashaorg/ui/lib/components/tabs';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ModeratorDetailMiniCard from '../components/moderator/mini-card';
 import { generateModeratorStatusLabel } from '../utils';
+import { Loader2 } from 'lucide-react';
 import { BasePageProps } from './overview';
 export type ModeratorPageProps = BasePageProps & {
   isFetchingModerators: boolean;
@@ -45,7 +45,7 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
 
       {isFetchingModerators && (
         <Stack alignItems="center" justifyContent="center" className="p-4">
-          <Spinner size="lg" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </Stack>
       )}
 

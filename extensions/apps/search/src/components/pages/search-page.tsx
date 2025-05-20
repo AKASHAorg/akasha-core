@@ -22,8 +22,8 @@ import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '../profile-search-card';
 import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
 import SearchStartCard from '../search-start-card';
+import { Loader2 } from 'lucide-react';
 import DropDownFilter from '../drop-down-filter';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import SwitchCard from '../switch-card';
 import TagSearchCard from '../tag-search-card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -474,15 +474,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         </Stack>
         {isFetchingSearch && (
           <Stack alignItems="center" justifyContent="center" spacing={8} className="p-8 m-auto">
-            <Spinner
-              color={{
-                light: 'secondaryLight',
-                dark: 'secondaryDark',
-              }}
-              size="xxl"
-              loadingLabel="Loading..."
-              partialSpinner={true}
-            />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <Typography variant="xs" className="font-medium">
               {t('Searching...')}
             </Typography>
