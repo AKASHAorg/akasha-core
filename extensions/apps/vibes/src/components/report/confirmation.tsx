@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
