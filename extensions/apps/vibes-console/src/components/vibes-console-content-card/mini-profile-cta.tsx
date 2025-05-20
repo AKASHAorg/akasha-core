@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image } from '@akashaorg/typings/lib/ui';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { TriangleAlertIcon } from 'lucide-react';
@@ -9,6 +8,12 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { transformSource } from '@akashaorg/ui-core-hooks';
 export type ItemType = 'Profile' | 'Beam' | 'Reflection';
 export type ProfileItemData = {
   avatar: Image;
@@ -30,11 +35,10 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
     <Stack direction="row" alignItems="center" justifyContent="between">
       <Stack spacing={3}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar
-            size="md"
-            avatar={itemData.avatar}
-            alternativeAvatars={itemData.alternativeAvatars}
-          />
+          <ProfileAvatar size="md">
+            <ProfileAvatarImage src={transformSource(itemData.avatar).src} />
+            <ProfileAvatarFallback />
+          </ProfileAvatar>
           <Stack>
             <Tooltip content="Golden Showers" placement="right">
               <Typography

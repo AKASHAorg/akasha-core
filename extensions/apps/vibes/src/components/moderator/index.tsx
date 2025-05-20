@@ -1,7 +1,6 @@
 import React from 'react';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Moderator } from '@akashaorg/typings/lib/ui';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
@@ -14,6 +13,11 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import {
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 export type ModeratorDetailCardProps = {
   moderator: Moderator;
   tenureInfoLabel: string;
@@ -28,13 +32,11 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
     <Card className="p-4 space-y-4">
       <Stack direction="row" justifyContent="between">
         <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar
-            size="lg"
-            avatar={transformSource(moderator?.avatar?.default)}
-            alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
-              transformSource(alternative),
-            )}
-          />
+          <ProfileAvatar size="xl">
+            <ProfileAvatarImage src={transformSource(moderator?.avatar?.default).src} />
+            <ProfileAvatarFallback />
+          </ProfileAvatar>
+
           <Stack>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Tooltip content={moderator.name} placement="right">

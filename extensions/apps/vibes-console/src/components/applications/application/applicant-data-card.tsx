@@ -1,7 +1,6 @@
 import React from 'react';
 import { transformSource } from '@akashaorg/ui-core-hooks';
 import { Profile } from '@akashaorg/typings/lib/ui';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
@@ -14,6 +13,9 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import { ProfileAvatarImage } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatarFallback } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
+import { ProfileAvatar } from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 export type ApplicantDataCardProps = {
   applicant: {
     name: string;
@@ -49,13 +51,10 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
       <Stack spacing={4} className="p-4">
         <Stack direction="row" justifyContent="between">
           <Stack direction="row" spacing={2} alignItems="center">
-            <Avatar
-              size={isMini ? 'lg' : 'md'}
-              avatar={transformSource(applicant?.avatar?.default)}
-              alternativeAvatars={applicant?.avatar?.alternatives?.map(alternative =>
-                transformSource(alternative),
-              )}
-            />
+            <ProfileAvatar size={isMini ? 'lg' : 'md'}>
+              <ProfileAvatarImage src={transformSource(applicant?.avatar?.default).src} />
+              <ProfileAvatarFallback />
+            </ProfileAvatar>
             <Stack>
               <Tooltip content={applicant.name} placement="right">
                 <Typography variant="sm" bold>
