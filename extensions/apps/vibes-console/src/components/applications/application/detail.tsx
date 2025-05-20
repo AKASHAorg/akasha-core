@@ -1,6 +1,6 @@
 import React from 'react';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
@@ -23,8 +23,8 @@ export const ApplicationDetail: React.FC<ApplicationDetailProps> = props => {
     <PageHeader {...props}>
       {sections.map(({ title, description, status, resolvedDate, value }, idx) => (
         <React.Fragment key={title}>
-          <Stack spacing="gap-y-1">
-            <Stack direction="row" align="center" justify="between">
+          <Stack spacing={1}>
+            <Stack direction="row" alignItems="center" justifyContent="between">
               <Typography variant="sm" bold>
                 {title}
               </Typography>

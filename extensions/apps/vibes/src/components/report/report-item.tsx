@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import {
@@ -26,7 +26,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Stack spacing="gap-y-4">
+      <Stack spacing={4}>
         <Typography>
           {introLabel}{' '}
           <Typography variant="xs" className="font-medium font-normal">
@@ -38,7 +38,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
           <>
             <CategoryPills {...props} />
 
-            <Stack spacing="gap-y-2">
+            <Stack spacing={2}>
               {selectedReason && (
                 <>
                   <Typography variant="h6">{`🛑 ${selectedReason.title}`}</Typography>

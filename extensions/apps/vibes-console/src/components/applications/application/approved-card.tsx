@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type ApplicationApprovedCardProps = {
   assetName?: string;
@@ -25,12 +25,12 @@ export const ApplicationApprovedCard: React.FC<ApplicationApprovedCardProps> = p
   } = props;
   return (
     <Card className="shadow-none">
-      <Stack spacing="gap-y-4">
+      <Stack spacing={4}>
         <Typography variant="h5" className="text-center">
           🎉 {titleLabel}! 🎉
         </Typography>
 
-        <Stack customStyle="w-[11.25rem] h-[11.25rem] mx-auto">
+        <Stack className="w-[11.25rem] h-[11.25rem] mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Moderator } from '@akashaorg/typings/lib/ui';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
 import { Tabs, TabsList, TabsTrigger } from '@akashaorg/ui/lib/components/tabs';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -44,7 +44,7 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
       </Tabs>
 
       {isFetchingModerators && (
-        <Stack align="center" justify="center" customStyle="p-4">
+        <Stack alignItems="center" justifyContent="center" className="p-4">
           <Spinner size="lg" />
         </Stack>
       )}
@@ -55,7 +55,7 @@ export const Moderators: React.FC<ModeratorPageProps> = props => {
 
       {!isFetchingModerators && filteredModeratorsList && filteredModeratorsList.length > 0 && (
         <Stack>
-          <Stack fullWidth={true} customStyle="h-full overflow-y-scroll">
+          <Stack className="w-full h-full overflow-y-scroll">
             {filteredModeratorsList?.map((moderator, idx) => {
               const tenureInfoLabel = generateModeratorStatusLabel(moderator.status);
               return (

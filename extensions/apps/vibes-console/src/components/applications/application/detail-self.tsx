@@ -1,6 +1,6 @@
 import React from 'react';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import {
@@ -24,13 +24,13 @@ export const SelfApplicationDetail: React.FC<SelfApplicationDetailProps> = props
       {sections.map(({ title, description, reason, status, applicationDate }, idx) => (
         <React.Fragment key={title}>
           <Stack
-            spacing="gap-y-1"
+            spacing={1}
             {...(idx === sections.length - 1 &&
               status === 'pending' && {
                 customStyle: 'mb-32',
               })}
           >
-            <Stack direction="row" align="center" justify="between">
+            <Stack direction="row" alignItems="center" justifyContent="between">
               <Typography variant="sm" bold>
                 {title}
               </Typography>

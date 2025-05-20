@@ -7,7 +7,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@akashaorg/ui/lib/components/radio-group';
 
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   SubtitleRenderer,
   SubtitleRendererProps,
@@ -44,9 +44,9 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Stack spacing="gap-y-4" customStyle="mb-24">
+      <Stack spacing={4} className="mb-24">
         <Typography variant="h6">{section1Label}</Typography>
-        <Stack customStyle="gap-y-2 md:flex-row md:gap-x-2">
+        <Stack className="gap-y-2 md:flex-row md:gap-x-2">
           <ReportReasonPill
             reason="Bullying and harassment"
             reportCount={46}
@@ -60,9 +60,9 @@ export const ReviewItem: React.FC<ReviewItemProps> = props => {
         </Stack>
 
         {section2Label && (
-          <Stack spacing="gap-y-2">
+          <Stack spacing={2}>
             <Typography variant="h6">{section2Label}</Typography>
-            <Stack direction="row" customStyle="gap-x-3 md:gap-x-6">
+            <Stack direction="row" className="gap-x-3 md:gap-x-6">
               <RadioGroup onValueChange={handleRadioChange} defaultValue={selectedPeriod}>
                 {radioButtons.map(buttonInfo => (
                   <div key={buttonInfo.label} className="">

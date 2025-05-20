@@ -2,7 +2,7 @@ import React from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { useRootComponentProps, withProviders } from '@akashaorg/ui-core-hooks';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { RouterProvider } from '@tanstack/react-router';
 import { router } from './app-routes';
 import { useApolloClient } from '@apollo/client';
@@ -19,7 +19,7 @@ const App: React.FC<unknown> = () => {
           <Helmet>
             <title>Search | {worldConfig.title}</title>
           </Helmet>
-          <Stack dataTestId="search-box">
+          <Stack data-testid="search-box">
             <RouterProvider
               router={router({
                 baseRouteName,

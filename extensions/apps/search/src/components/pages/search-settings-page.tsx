@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
@@ -85,7 +85,7 @@ const SettingsPage: React.FC = () => {
       </Typography>
 
       <Separator className="my-2" />
-      <Stack justify="between" direction="row">
+      <Stack justifyContent="between" direction="row">
         <Typography variant="h6">
           <>{t('Show NSFW Content')}</>
         </Typography>
@@ -96,13 +96,7 @@ const SettingsPage: React.FC = () => {
           'If you enable NSFW content, any sensitive content will show up in your search results when you lookup anything.',
         )}
       </Typography>
-      <Stack
-        direction="row"
-        fullWidth
-        justify="end"
-        spacing="gap-x-4"
-        customStyle="pr-2 pb-2 pt-32"
-      >
+      <Stack direction="row" justifyContent="end" spacing={4} className="w-full pr-2 pb-2 pt-32">
         <Button
           variant="link"
           onClick={cancelHandler}

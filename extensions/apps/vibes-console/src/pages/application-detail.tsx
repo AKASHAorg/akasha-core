@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ApplicantDataCard, ApplicationDetail } from '../components/applications/application';
 import { NoItemFound } from '../components/no-item-found';
 
@@ -16,7 +16,7 @@ export const ApplicationDetailPage: React.FC<unknown> = () => {
       </Card>
     );
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       <ApplicantDataCard
         isMini={true}
         applicant={applicant}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Discord } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -33,12 +33,12 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
   } = props;
   return (
     <Card className="md:p-4">
-      <Stack spacing="gap-y-4" align="center">
+      <Stack spacing={4} alignItems="center">
         <Typography variant="h5" className="text-center">
           {titleLabel} 🙌🏽
         </Typography>
 
-        <Stack customStyle="w-45 h-45 my-2 mx-auto">
+        <Stack className="w-45 h-45 my-2 mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}
@@ -53,13 +53,13 @@ export const ReportItemConfirmation: React.FC<ReportItemConfirmationProps> = pro
           {continueLabel}
         </Button>
 
-        <Stack align="center" justifySelf="end" spacing="gap-y-2">
+        <Stack alignItems="center" spacing={2} className="justify-self-end">
           <Typography variant="xs" className="font-medium font-normal text-center">
             {footnoteLabel}
           </Typography>
 
           <Link to={ctaUrl} target="_blank">
-            <Stack direction="row" align="center" spacing="gap-x-2">
+            <Stack direction="row" alignItems="center" spacing={2}>
               <Discord className="h-4 w-4 mx-auto my-0 [&>*]:fill-secondaryLight dark:[&>*]:stroke-secondaryDark" />
 
               <Typography

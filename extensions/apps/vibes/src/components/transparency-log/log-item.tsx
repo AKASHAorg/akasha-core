@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ReportReasonPill from '@akashaorg/design-system-components/lib/components/ReportReasonPill';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 export type TransparencyLogItemType = 'Beam' | 'Reflection' | 'Profile';
@@ -30,13 +30,12 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
   return (
     <Card className="p-0">
       <Stack
-        spacing="gap-y-1"
-        padding="p-4"
-        customStyle={`rounded-t-2xl ${item.status === 'Kept' ? 'bg-success/10 dark:bg-success/30' : 'bg-errorLight/10 dark:bg-errorDark/40'}`}
+        spacing={1}
+        className={`p-4 rounded-t-2xl ${item.status === 'Kept' ? 'bg-success/10 dark:bg-success/30' : 'bg-errorLight/10 dark:bg-errorDark/40'}`}
       >
-        <Stack direction="row" align="center" justify="between">
+        <Stack direction="row" alignItems="center" justifyContent="between">
           <Typography variant="h5">{item.type}</Typography>
-          <Stack direction="row" spacing="gap-x-1">
+          <Stack direction="row" spacing={1}>
             <Typography variant="xs" className="font-medium font-normal">
               {`${caseLabel} # `}
             </Typography>
@@ -46,17 +45,17 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
           </Stack>
         </Stack>
 
-        <Stack direction="row" align="center" spacing="gap-x-1.5">
+        <Stack direction="row" alignItems="center" spacing={1}>
           <Stack
-            customStyle={`w-2 h-2 rounded-full ${item.status === 'Kept' ? 'bg-success' : 'bg-errorLight dark:bg-errorDark'}`}
+            className={`w-2 h-2 rounded-full ${item.status === 'Kept' ? 'bg-success' : 'bg-errorLight dark:bg-errorDark'}`}
           />
           <Typography variant="xs" className="font-medium font-normal">
             {item.status}
           </Typography>
         </Stack>
 
-        <Stack direction="row" align="center" justify="between">
-          <Stack direction="row" spacing="gap-x-1">
+        <Stack direction="row" alignItems="center" justifyContent="between">
+          <Stack direction="row" spacing={1}>
             <Typography variant="xs" className="font-medium font-normal">
               {`${reportedLabel} `}
             </Typography>
@@ -65,7 +64,7 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
             </Typography>
           </Stack>
 
-          <Stack direction="row" spacing="gap-x-1">
+          <Stack direction="row" spacing={1}>
             <Typography variant="xs" className="font-medium font-normal">
               {`${resolvedLabel} `}
             </Typography>
@@ -77,13 +76,13 @@ const TransparencyLogItemCard: React.FC<TransparencyLogItemCardProps> = props =>
       </Stack>
 
       {item.status === 'Kept' && (
-        <Stack customStyle="mt-4 mx-4">
+        <Stack className="mt-4 mx-4">
           {/* pass the correct data, when enabled */}
           {/* <EntryCard /> */}
         </Stack>
       )}
 
-      <Stack padding="p-4" spacing="gap-y-2">
+      <Stack spacing={2} className="p-4">
         <Typography>
           {`This ${item.type} has been ${item.status === 'Delisted' ? 'delisted' : 'reported'} for`}
         </Typography>

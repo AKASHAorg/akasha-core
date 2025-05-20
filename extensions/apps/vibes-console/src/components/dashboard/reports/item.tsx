@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { FlagIcon } from 'lucide-react';
 import MiniProfileCTA from '../../vibes-console-content-card/mini-profile-cta';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
@@ -28,10 +28,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
   const { report, sliceIndex, noExplanationLabel, viewMoreLabel, onClickViewMore } = props;
   return (
     <Card className="shadow-none p-0">
-      <Stack
-        padding="p-4"
-        customStyle="border-b-1 border-b-solid border-b-grey8 dark:border-b-grey5"
-      >
+      <Stack className="p-4 border-b-1 border-b-solid border-b-grey8 dark:border-b-grey5">
         <MiniProfileCTA
           itemData={{
             avatar: {
@@ -45,13 +42,7 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
             nsfw: false,
           }}
           ctaExt={
-            <Stack
-              direction="row"
-              align="center"
-              spacing="gap-x-1"
-              padding="py-2 px-3"
-              customStyle="w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark"
-            >
+            <Stack direction="row" alignItems="center" spacing={1} className="py-2 px-3 w-fit rounded-full bg-secondaryLight/30 dark:bg-secondaryDark">
               <FlagIcon className="h-4 w-4 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-grey2" />
               <Typography variant="xs" className="font-medium text-secondaryLight dark:text-grey2">
                 {report.flags.length}
@@ -60,11 +51,11 @@ export const ReportItem: React.FC<ReportItemProps> = props => {
           }
         />
       </Stack>
-      <Stack padding="p-4" spacing="gap-y-2">
+      <Stack spacing={2} className="p-4">
         {report.flags.slice(0, sliceIndex).map((r, id, ar) => (
-          <Stack key={id} spacing="gap-y-3">
-            <Stack spacing="gap-y-3">
-              <Stack direction="row" align="center" justify="between">
+          <Stack key={id} spacing={3}>
+            <Stack spacing={3}>
+              <Stack direction="row" alignItems="center" justifyContent="between">
                 <Typography variant="xs" bold>
                   Flag #{id + 1}
                 </Typography>

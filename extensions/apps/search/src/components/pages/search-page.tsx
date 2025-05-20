@@ -16,7 +16,7 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import EntryCardRenderer from './entry-renderer';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '../profile-search-card';
@@ -354,7 +354,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         )}
 
         {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
-          <Stack customStyle="mt-8">
+          <Stack className="mt-8">
             {
               //@TODO replace with error loader
             }
@@ -375,7 +375,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           </Stack>
         )}
 
-        <Stack customStyle="mt-4">
+        <Stack className="mt-4">
           {activeButton === ButtonValues.PEOPLE &&
             searchState[ButtonValues.PEOPLE].done &&
             !!searchProfilesState.length && (
@@ -390,7 +390,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   />
                 }
                 {searchProfilesState?.map((profileData: Profile, index: number) => (
-                  <Stack key={index} customStyle="pb-4">
+                  <Stack key={index} className="pb-4">
                     <ProfileSearchCard
                       handleFollow={() => handleFollowProfile(profileData?.did?.id)}
                       handleUnfollow={() => handleUnfollowProfile(profileData?.did?.id)}
@@ -473,7 +473,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             )}
         </Stack>
         {isFetchingSearch && (
-          <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
+          <Stack alignItems="center" justifyContent="center" spacing={8} className="p-8 m-auto">
             <Spinner
               color={{
                 light: 'secondaryLight',
@@ -489,7 +489,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           </Stack>
         )}
         {/* triggers intersection observer */}
-        <Stack padding="p-2" ref={loadmoreRef} />
+        <Stack ref={loadmoreRef} className="p-2">
       </Stack>
     </Card>
   );

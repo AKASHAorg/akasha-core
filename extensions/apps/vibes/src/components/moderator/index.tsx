@@ -5,7 +5,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
@@ -26,8 +26,8 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
     props;
   return (
     <Card className="p-4 space-y-4">
-      <Stack direction="row" justify="between">
-        <Stack direction="row" spacing="gap-x-2" align="center">
+      <Stack direction="row" justifyContent="between">
+        <Stack direction="row" spacing={2} alignItems="center">
           <Avatar
             size="lg"
             avatar={transformSource(moderator?.avatar?.default)}
@@ -36,13 +36,11 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
             )}
           />
           <Stack>
-            <Stack direction="row" align="center" spacing="gap-x-1">
+            <Stack direction="row" alignItems="center" spacing={1}>
               <Tooltip content={moderator.name} placement="right">
                 <Typography variant="sm" bold>{`${moderator.name}`}</Typography>
               </Tooltip>
-              <Stack
-                customStyle={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(moderator.status)}`}
-              />
+              <Stack className="`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(moderator.status)" />
             </Stack>
 
             <ProfileAvatarButton profileDID={moderator.did.id}>
@@ -56,7 +54,7 @@ const ModeratorDetailCard: React.FC<ModeratorDetailCardProps> = props => {
 
       <Separator />
 
-      <Stack direction="row" justify="between">
+      <Stack direction="row" justifyContent="between">
         <Stack>
           <Typography variant="xs" className="font-medium font-normal text-grey4 dark:text-grey6">
             {tenureInfoLabel}:

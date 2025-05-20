@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type SectionHeaderProps = {
   titleLabel: string;
@@ -12,8 +12,8 @@ export type SectionHeaderProps = {
 export const SectionRenderer: React.FC<SectionHeaderProps> = props => {
   const { titleLabel } = props;
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" justify="between">
+    <Stack spacing={4}>
+      <Stack direction="row" justifyContent="between">
         <Typography variant="h5">{titleLabel}</Typography>
       </Stack>
     </Stack>

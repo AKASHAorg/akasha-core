@@ -5,7 +5,7 @@ import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
@@ -46,9 +46,9 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
   } = props;
   return (
     <Card className="p-0">
-      <Stack padding="p-4" spacing="gap-y-4">
-        <Stack direction="row" justify="between">
-          <Stack direction="row" spacing="gap-x-2" align="center">
+      <Stack spacing={4} className="p-4">
+        <Stack direction="row" justifyContent="between">
+          <Stack direction="row" spacing={2} alignItems="center">
             <Avatar
               size={isMini ? 'lg' : 'md'}
               avatar={transformSource(applicant?.avatar?.default)}
@@ -75,7 +75,7 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
 
         <Separator />
 
-        <Stack direction="row" justify="between">
+        <Stack direction="row" justifyContent="between">
           <Stack>
             <Typography variant="sm" bold>
               {appliedOnLabel}:
@@ -100,10 +100,9 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
       {!isMini && (
         <Stack
           direction="row"
-          padding="p-4"
-          align="center"
-          justify="between"
-          customStyle="border-t-1 border-solid border-grey8 dark:border-grey5"
+          alignItems="center"
+          justifyContent="between"
+          className="p-4 border-t-1 border-solid border-grey8 dark:border-grey5"
         >
           <Button onClick={onClickViewProfile}>{viewProfileLabel}</Button>
           {viewApplicationLabel && (

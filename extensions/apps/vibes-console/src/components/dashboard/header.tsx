@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { SettingsIcon } from 'lucide-react';
 
@@ -17,8 +17,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
   const [inputValue, setInputValue] = React.useState<string>('');
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" justify="between">
+    <Stack spacing={4}>
+      <Stack direction="row" justifyContent="between">
         <Typography variant="h5">{titleLabel}</Typography>
 
         <Button aria-label="settings" size="icon" variant="outline" onClick={onSettingsButtonClick}>
@@ -26,7 +26,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = props => {
         </Button>
       </Stack>
 
-      <Stack direction="row" justify="between" spacing="gap-x-4">
+      <Stack direction="row" justifyContent="between" spacing={4}>
         <SearchBar
           fullWidth={true}
           inputValue={inputValue}

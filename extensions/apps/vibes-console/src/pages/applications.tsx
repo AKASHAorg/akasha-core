@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { useAkashaStore, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { IModalNavigationOptions } from '@akashaorg/typings/lib/ui';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { JoinVibesCard } from '../components/applications/join-vibes-card';
 import { SectionRenderer } from '../components/applications/section-renderer';
@@ -45,7 +45,7 @@ export const Applications: React.FC<unknown> = () => {
     });
   };
   return (
-    <Stack spacing="gap-y-6">
+    <Stack spacing={6}>
       {/* show this card if guest or not a moderator */}
       {!isModerator && (
         <JoinVibesCard

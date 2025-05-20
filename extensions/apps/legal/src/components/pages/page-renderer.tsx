@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import MarkdownCard from '@akashaorg/design-system-components/lib/components/MarkdownCard';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type PageRendererProps = {
@@ -26,14 +26,13 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
   return (
     <Card className="p-0">
       <Stack
-        padding="py-4"
-        align="center"
-        justify="center"
-        customStyle="border-b-1 border-solid border-grey8 dark:border-grey5"
+        alignItems="center"
+        justifyContent="center"
+        className="py-4 border-b-1 border-solid border-grey8 dark:border-grey5"
       >
         <Typography bold>{title}</Typography>
       </Stack>
-      <Stack padding={16}>
+      <Stack className="p-4">
         {!doc && <Spinner />}
         {doc && <MarkdownCard mdText={doc} />}
       </Stack>

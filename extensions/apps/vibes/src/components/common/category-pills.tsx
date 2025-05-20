@@ -3,7 +3,7 @@ import React from 'react';
 import { ModerationCategory } from '@akashaorg/typings/lib/ui';
 
 import { XIcon } from 'lucide-react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 
 export type CategoryPillsProps = {
@@ -24,7 +24,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
   } = props;
 
   return (
-    <Stack direction="row" customStyle="flex-wrap">
+    <Stack direction="row" className="flex-wrap">
       {allCategoriesLabel && (
         <Pill
           label={allCategoriesLabel}
@@ -40,7 +40,11 @@ export const CategoryPills: React.FC<CategoryPillsProps> = props => {
           key={label + idx}
           label={label}
           active={categories.includes(value)}
-          icon={categories.includes(value) ? <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> : undefined}
+          icon={
+            categories.includes(value) ? (
+              <XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
+            ) : undefined
+          }
           iconDirection="right"
           customStyle="mt-3 mr-3"
           onPillClick={onPillClick({ label, value })}

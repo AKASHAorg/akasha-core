@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { transformSource, useRootComponentProps, useAkashaStore } from '@akashaorg/ui-core-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import OnboardingSuggestionsCard from '../onboarding-suggestions-card';
 import OnboardingStartCard from '../onboarding-start-card';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
@@ -85,11 +85,11 @@ const OnboardingPage: React.FC = () => {
 
   return (
     <HelmetProvider>
-      <Stack fullWidth={true}>
+      <Stack className="w-full">
         <Helmet>
           <title>{t('Onboarding')}</title>
         </Helmet>
-        <Stack spacing="gap-4">
+        <Stack spacing={4}>
           <OnboardingStartCard
             inputPlaceholderLabel={t('Search')}
             titleLabel={t('Search')}

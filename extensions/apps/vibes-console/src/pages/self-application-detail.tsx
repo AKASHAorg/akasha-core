@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   ApplicationApprovedCard,
   SelfApplicationDetail,
@@ -34,7 +34,7 @@ export const SelfApplicationDetailPage: React.FC<unknown> = () => {
       </Card>
     );
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       {applicationData.status === 'approved' && (
         <ApplicationApprovedCard
           titleLabel={t('Application Approved')}

@@ -5,7 +5,7 @@ import {
   PageHeaderProps,
   PageHeader,
 } from '@akashaorg/design-system-components/lib/components/PageHeader';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ModeratorListItem from '../moderator-list-item';
 import { NoItemFound } from '../../no-item-found';
@@ -30,7 +30,7 @@ export const AssignAdmin: React.FC<AssignAdminProps> = props => {
   } = props;
   return (
     <PageHeader {...props}>
-      <Stack spacing="gap-y-6" customStyle="mb-8">
+      <Stack spacing={6} className="mb-8">
         <Typography>{introLabel}</Typography>
         {!assignedAdmin && (
           <AutoComplete

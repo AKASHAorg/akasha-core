@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { generateTenureInfoLabel } from '../utils';
 import ModeratorDetailCard from '../components/moderator';
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
@@ -24,7 +24,7 @@ export const TransparencyLogItem: React.FC<TransparencyLogItemPageProps> = () =>
   const tenureInfoLabel = generateTenureInfoLabel(moderator.status);
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       <ModeratorDetailCard
         moderator={moderator}
         viewProfileLabel={t('View Profile')}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type TApplicationStatus = 'pending' | 'approved' | 'rejected' | 'withdrawn';
 export const getApplicationStatusColor = (status: TApplicationStatus) => {
@@ -9,8 +9,8 @@ export const getApplicationStatusColor = (status: TApplicationStatus) => {
   return 'bg-grey6';
 };
 export const renderStatusDetail = (status: TApplicationStatus) => (
-  <Stack direction="row" align="center" spacing="gap-x-1">
-    <Stack customStyle={`w-2 h-2 rounded-full ${getApplicationStatusColor(status)}`} />
+  <Stack direction="row" alignItems="center" spacing={1}>
+    <Stack className={`w-2 h-2 rounded-full ${getApplicationStatusColor(status)}`} />
     <Typography variant="sm" bold>
       {`${status.charAt(0).toLocaleUpperCase()}${status.substring(1)}`}
     </Typography>
