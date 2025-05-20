@@ -4,7 +4,7 @@ import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ReflectEditorProps } from '../../reflect-editor';
 import ReflectionCard from '@akashaorg/ui-lib-feed/lib/components/cards/reflection-card';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import routes, { REFLECT } from '../../../routes';
 import { useTranslation } from 'react-i18next';
 import { ReflectionData } from '@akashaorg/typings/lib/ui';

@@ -11,7 +11,7 @@ import {
   InfiniteScrollList,
   ScrollRestoration,
 } from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {

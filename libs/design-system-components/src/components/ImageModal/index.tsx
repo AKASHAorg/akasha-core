@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import Img from '@akashaorg/design-system-core/lib/components/Image';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import Cropper, { Area, CropperProps, Point } from 'react-easy-crop';
 import { type Image } from '@akashaorg/typings/lib/ui';
@@ -11,6 +11,7 @@ import { ZoomOutIcon, ZoomInIcon } from 'lucide-react';
 import { getCroppedImage } from './get-cropped-image';
 import { XCircleIcon } from 'lucide-react';
 import { cssVars } from '@akashaorg/ui/lib/library/to-css-var';
+import { cn } from '@akashaorg/ui/lib/library/utils';
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
 const ZOOM_STEP = 0.01;
@@ -148,11 +149,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
         })}
       >
         <Card
-          padding="p-0"
-          elevation="none"
-          radius={20}
-          border={showCropError}
-          customStyle={`relative w-[var(--width)] h-[var(--height)] overflow-hidden bg-transparent ${imageContainerBorderStyle}`}
+          className={cn(
+            'p-0',
+            'relative w-[var(--width)] h-[var(--height)] overflow-hidden bg-transparent',
+            imageContainerBorderStyle,
+            !showCropError && 'border-none',
+          )}
         >
           <Cropper
             image={imageUrl}
