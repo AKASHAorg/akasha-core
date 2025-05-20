@@ -18,7 +18,13 @@ import Img from '@akashaorg/design-system-core/lib/components/Image';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { UploadIcon, PencilIcon, SquarePenIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
-import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
@@ -35,12 +41,12 @@ export type HeaderProps = {
   deleteLabel: string;
   saveLabel: string;
   imageTitle: {
-    logoImage: ModalProps['title'];
-    coverImage: ModalProps['title'];
+    logoImage: { label: string };
+    coverImage: { label: string };
   };
   deleteTitle: {
-    logoImage: ModalProps['title'];
-    coverImage: ModalProps['title'];
+    logoImage: { label: string };
+    coverImage: { label: string };
   };
   confirmationLabel: {
     logoImage: string;
@@ -365,37 +371,37 @@ export const Header: React.FC<HeaderProps> = ({
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}
       />
-      <Modal
-        show={showLogoGuidelineModal}
-        title={{
-          label: logoGuidelines.titleLabel,
-          variant: 'h6',
-        }}
-        onClose={() => setShowLogoGuidelineModal(false)}
-      >
-        <Stack alignItems="center" spacing={4} className="p-4">
-          <ul className="list-disc ml-2 text-black dark:text-white">
-            {logoGuidelines.guidelines.map((guideline, index) => (
-              <li key={index}>
-                <Typography>{guideline}</Typography>
-              </li>
-            ))}
-          </ul>
-          <Stack alignItems="center" spacing={4} className="relative">
-            <Img
-              src={`${publicImagePath}/extension-logo-guidelines.webp`}
-              alt="extensions-logo-guideline"
-              customStyle={`w-[12.5rem]`}
-            />
-            <Typography
-              variant="xs"
-              className="font-medium text-grey4 dark:text-grey6 absolute bottom-0"
-            >
-              {logoGuidelines.imageDescription}
-            </Typography>
-          </Stack>
-        </Stack>
-      </Modal>
+      <AlertDialog open={showLogoGuidelineModal} onOpenChange={setShowLogoGuidelineModal}>
+        <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
+            <AlertDialogTitle>{logoGuidelines.titleLabel}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Stack alignItems="center" spacing={4} className="p-4">
+                <ul className="list-disc ml-2 text-black dark:text-white">
+                  {logoGuidelines.guidelines.map((guideline, index) => (
+                    <li key={index}>
+                      <Typography>{guideline}</Typography>
+                    </li>
+                  ))}
+                </ul>
+                <Stack alignItems="center" spacing={4} className="relative">
+                  <Img
+                    src={`${publicImagePath}/extension-logo-guidelines.webp`}
+                    alt="extensions-logo-guideline"
+                    customStyle={`w-[12.5rem]`}
+                  />
+                  <Typography
+                    variant="xs"
+                    className="font-medium text-grey4 dark:text-grey6 absolute bottom-0"
+                  >
+                    {logoGuidelines.imageDescription}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
       <input ref={uploadInputRef} type="file" onChange={e => onUpload(e.target.files[0])} hidden />
     </Stack>
   );

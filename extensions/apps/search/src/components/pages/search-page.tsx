@@ -20,7 +20,7 @@ import Stack from '@akashaorg/design-system-core/lib/components/Stack';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '../profile-search-card';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 import SearchStartCard from '../search-start-card';
 import DropDownFilter from '../drop-down-filter';
 import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
@@ -346,7 +346,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         )}
 
         {searchKeyword === '' && (
-          <DefaultEmptyCard
+          <EmptyCard
             noBorder={true}
             infoText=" ✨ Start searching for something ✨"
             assetName="search-1"
