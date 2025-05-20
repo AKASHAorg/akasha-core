@@ -2,7 +2,14 @@ import React, { useCallback, useContext, useRef, useState } from 'react';
 import ExtensionGalleryManager, { type Image } from '../../../extension-gallery-manager';
 import ImageOverlay from '@akashaorg/design-system-components/lib/components/ImageOverlay';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
@@ -20,6 +27,7 @@ import { useAtom } from 'jotai';
 import { AtomContext as EditLocalAtomContext, FormData } from '../main-page';
 import { AtomContext as EditPublishedAtomContext } from '../../extension-edit-published-page/main-page';
 import { MAX_GALLERY_IMAGES, MAX_UPLOAD_RETRIES } from '../../../../constants';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 type ExtensionGalleryManagerPageProps = {
   type: 'local' | 'published';
   extensionId: string;
@@ -281,29 +289,24 @@ export const ExtensionGalleryManagerPage: React.FC<ExtensionGalleryManagerPagePr
           )}
         </>
       )}
-      <Modal
-        title={{
-          label: t('Delete Image'),
-        }}
-        show={showDeleteModal}
-        onClose={onDeleteModalClose}
-        actions={[
-          {
-            variant: 'text',
-            label: t('Cancel'),
-            onClick: onDeleteModalClose,
-          },
-          {
-            variant: 'primary',
-            label: t('Delete'),
-            onClick: () => onDeleteConfirmed(selectedImage.id),
-          },
-        ]}
-      >
-        <Typography>
-          {t('Are you sure you want to delete this image? This action cannot be undone.')}
-        </Typography>
-      </Modal>
+      <AlertDialog open={showDeleteModal} onOpenChange={onDeleteModalClose}>
+        <AlertDialogContent className="max-w-[615px] sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
+            <AlertDialogTitle>{t('Delete Image')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Typography>
+                {t('Are you sure you want to delete this image? This action cannot be undone.')}
+              </Typography>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="sm:justify-center">
+            <Button variant="outline" onClick={onDeleteModalClose}>
+              {t('Cancel')}
+            </Button>
+            <Button onClick={() => onDeleteConfirmed(selectedImage.id)}>{t('Delete')}</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };

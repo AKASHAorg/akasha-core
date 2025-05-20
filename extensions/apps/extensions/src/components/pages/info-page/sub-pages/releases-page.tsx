@@ -28,7 +28,7 @@ import {
   selectAppsReleases,
   selectAppsReleasesPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 
 type ReleasesPageProps = {
   appName: string;
@@ -119,13 +119,14 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           {releasesReq.networkStatus === NetworkStatus.ready && !releases.length && (
             <>
               <Separator />
-              <DefaultEmptyCard
+              <EmptyCard
                 noBorder={true}
                 assetName="longbeam-notfound"
                 infoText={t('There are no releases for this extension yet')}
               />
             </>
           )}
+          EmptyCard
           {releases && releases.length > 0 && (
             <InfiniteScroll
               count={releases.length}
