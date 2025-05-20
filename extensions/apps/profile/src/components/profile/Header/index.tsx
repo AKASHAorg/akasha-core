@@ -33,7 +33,6 @@ import {
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
-import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 
 type ProfileBadge = {
   toolTipLabel: string;
@@ -157,7 +156,7 @@ const Header: React.FC<HeaderProps> = ({
                     <Tooltip>
                       <TooltipTrigger>
                         <Badge variant="destructive" className="px-2">
-                          <Typography variant="xs">{badge.label}</Typography>
+                          {badge.label}
                         </Badge>
                       </TooltipTrigger>
                       <TooltipContent side="bottom">{badge.toolTipLabel}</TooltipContent>

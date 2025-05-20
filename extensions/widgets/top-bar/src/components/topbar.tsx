@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '@akashaorg/ui-core-hooks';
 import { ThemingEvents } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { PanelLeftOpenIcon, ChevronLeftIcon, PanelRightOpenIcon } from 'lucide-react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
@@ -124,8 +123,11 @@ const Topbar: React.FC<ITopbarProps> = props => {
       <button onClick={onBrandClick} className="p-0 !ml-0 cursor-pointer">
         <Stack alignItems="center" justifyContent="center" direction="column" spacing={1}>
           <WorldIcon fallback={<Akasha />} />
-          <Badge variant="destructive">
-            <Typography variant="xs">Alpha</Typography>
+          <Badge
+            variant="destructive"
+            className="border-errorLight dark:border-errorDark bg-errorLight dark:bg-errorDark text-white"
+          >
+            Alpha
           </Badge>
         </Stack>
       </button>

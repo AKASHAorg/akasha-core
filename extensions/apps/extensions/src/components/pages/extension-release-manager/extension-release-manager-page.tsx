@@ -384,11 +384,7 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                               <Typography variant="sm" className="font-semibold">
                                 {`Release ${releaseData?.version}`}
                               </Typography>
-                              {itemIndex === 0 && (
-                                <Badge variant="outline">
-                                  <Typography variant="xs">{t('Current')}</Typography>
-                                </Badge>
-                              )}
+                              {itemIndex === 0 && <Badge variant="outline">{t('Current')}</Badge>}
                             </Stack>
                             <Typography variant="xs" className="font-medium">
                               {createdAt}

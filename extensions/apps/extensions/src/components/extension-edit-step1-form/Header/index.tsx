@@ -330,15 +330,11 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Badge variant="outline">
               <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography variant="xs">{capitalize(extensionType?.toLowerCase())}</Typography>
+                {capitalize(extensionType?.toLowerCase())}
                 <ExtensionTypeIcon extensionType={extensionType} />
               </Stack>
             </Badge>
-            {nsfw && (
-              <Badge variant="destructive">
-                <Typography variant="xs">NSFW</Typography>
-              </Badge>
-            )}
+            {nsfw && <Badge variant="destructive">NSFW</Badge>}
           </Stack>
         )}
       </Stack>

@@ -218,9 +218,7 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                         }
                       }}
                     >
-                      <Badge variant="outline">
-                        <Typography variant="xs">{tag}</Typography>
-                      </Badge>
+                      <Badge variant="outline">{tag}</Badge>
                     </button>
                   ))}
                 </Stack>
