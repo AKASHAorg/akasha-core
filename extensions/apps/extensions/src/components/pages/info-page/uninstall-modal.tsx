@@ -8,7 +8,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@akashaorg/ui/lib/components/alert-dialog';
-
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Loader2 } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
