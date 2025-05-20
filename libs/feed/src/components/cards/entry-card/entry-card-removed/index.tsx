@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { TriangleAlertIcon } from 'lucide-react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { cn } from '@akashaorg/ui/lib/library/utils';
@@ -16,9 +16,9 @@ const EntryCardRemoved: React.FC<EntryCardRemovedProps> = props => {
         'rounded-[0.625rem] px-4 py-2 bg-nested-card',
       )}
     >
-      <Stack direction="row" spacing="gap-x-1">
+      <Stack direction="row" spacing={1}>
         <TriangleAlertIcon className="[&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
-        <Stack spacing="gap-y-1" customStyle="grow">
+        <Stack spacing={1} className="grow">
           {props.message}
         </Stack>
       </Stack>

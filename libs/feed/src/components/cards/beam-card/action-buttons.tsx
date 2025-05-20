@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Blocks } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Antenna } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
@@ -26,7 +26,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
   return (
     <>
       {appDisplayName && (
-        <Stack direction="row" align="center" spacing="gap-x-2" customStyle="mr-auto">
+        <Stack direction="row" alignItems="center" spacing={2} className="mr-auto">
           <Antenna className="h-4 w-4 [&>*]:fill-secondaryLight dark:[&>*]:fill-secondaryDark" />
           <Typography variant="xs" className="font-medium font-normal text-grey7 dark:text-grey6">
             {t('Published via {{name}}', {
@@ -38,9 +38,9 @@ const ActionButtons: React.FC<ActionButtonsProps> = props => {
       {showHiddenContent && (
         <button onClick={onShowBlockName}>
           <Stack
-            align="center"
-            justify="center"
-            customStyle={`${showBlockName ? 'bg-secondaryLight/30 dark:bg-grey5' : 'transparent'} ${showBlockNameStyle}`}
+            alignItems="center"
+            justifyContent="center"
+            className={`${showBlockName ? 'bg-secondaryLight/30 dark:bg-grey5' : 'transparent'} ${showBlockNameStyle}`}
           >
             <Blocks className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
           </Stack>

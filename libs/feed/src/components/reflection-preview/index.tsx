@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import ReflectionCard from '../cards/reflection-card';
@@ -47,8 +47,8 @@ const ReflectionPreview: React.FC<ReflectionPreviewProps> = props => {
 
   return (
     reflections?.length > 0 && (
-      <Stack spacing="gap-y-1" customStyle="ml-4 mb-4">
-        <Stack customStyle={leftBorderStyle}>
+      <Stack spacing={1} className="ml-4 mb-4">
+        <Stack className={leftBorderStyle}>
           {reflections.slice(0, MAXIMUM_REFLECTION_PREVIEWS).map(reflection => (
             <ReflectionCard
               key={reflection?.id}
