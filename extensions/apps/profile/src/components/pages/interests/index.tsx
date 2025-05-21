@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { CheckIcon } from 'lucide-react';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import ProfileInterestsLoading from '../../profile/placeholders/profile-interests-loading';
 import { useTranslation } from 'react-i18next';
@@ -181,15 +181,18 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
               {profileInterests?.map((interest, idx) => {
                 const isActive = !!activeInterests.find(ac => ac.value === interest.value);
                 return (
-                  <Pill
+                  <button
                     key={`${idx}-${interest}`}
-                    label={interest.value}
-                    iconDirection="right"
-                    onPillClick={() => handleInterestClick(interest)}
-                    active={isActive}
-                    type="action"
-                    {...(isActive && { icon: <CheckIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" /> })}
-                  />
+                    type="button"
+                    onClick={() => handleInterestClick(interest)}
+                  >
+                    <Badge key={`${idx}-${interest}`} variant={isActive ? 'default' : 'outline'}>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                        {interest.value}
+                        {isActive && <CheckIcon size={14} />}
+                      </Stack>
+                    </Badge>
+                  </button>
                 );
               })}
             </Stack>

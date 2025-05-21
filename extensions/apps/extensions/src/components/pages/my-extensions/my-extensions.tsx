@@ -27,8 +27,11 @@ import {
   SelectContent,
   SelectItem,
 } from '@akashaorg/ui/lib/components/select';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import {
   ErrorLoader,
   ErrorLoaderDescription,
@@ -41,13 +44,16 @@ import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { ExtensionElement } from './extension-element';
 import appRoutes, { MY_EXTENSIONS } from '../../../routes';
 import { DRAFT_EXTENSIONS } from '../../../constants';
+
 const ENTRY_HEIGHT = 92;
+
 export const MyExtensionsPage: React.FC<unknown> = () => {
   const { uiEvents, baseRouteName, getCorePlugins } = useRootComponentProps();
   const uiEventsRef = React.useRef(uiEvents);
   const { t } = useTranslation('app-extensions');
   const navigate = useNavigate();
   const navigateTo = getCorePlugins().routing.navigateTo;
+
   const showErrorNotification = React.useCallback((title: string) => {
     uiEventsRef.current.next({
       event: NotificationEvents.ShowNotification,
@@ -60,11 +66,13 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
   const {
     data: { authenticatedDID },
   } = useAkashaStore();
+
   const handleNavigateToCreateApp = () => {
     navigate({
       to: '/create-extension',
     });
   };
+
   const extensionTypeMenuItems = useMemo(
     () => [
       capitalize(AkashaAppApplicationType.App),
@@ -88,6 +96,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     setSelectedStatus('');
     setSelectedType('');
   };
+
   const {
     data: appsByPubReqData,
     error,
@@ -105,6 +114,7 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
     notifyOnNetworkStatusChange: true,
     skip: !authenticatedDID,
   });
+
   const appsList = useMemo(() => {
     return appsByPubReqData?.node && hasOwn(appsByPubReqData.node, 'akashaAppList')
       ? appsByPubReqData.node.akashaAppList
@@ -236,18 +246,17 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
         </ErrorLoader>
       )}
       {!error && allMyExtensions?.length === 0 && (
-        <DefaultEmptyCard
+        <EmptyCard
           infoText={t("You haven't created any extensions yet")}
           assetName="longbeam-notfound"
         />
       )}
       {!error && allMyExtensions?.length > 0 && (
         <Card className="shadow-none overflow-visible">
-          <DynamicInfiniteScroll
+          <InfiniteScroll
             count={allMyExtensions.length}
             estimatedHeight={ENTRY_HEIGHT}
             overScan={1}
-            itemSpacing={16}
             hasNextPage={pageInfo && pageInfo.hasNextPage}
             loading={loading}
             onLoadMore={() => {
@@ -258,26 +267,28 @@ export const MyExtensionsPage: React.FC<unknown> = () => {
               });
             }}
           >
-            {({ itemIndex }) => {
-              const extensionData = allMyExtensions[itemIndex];
-              return (
-                <ExtensionElement
-                  key={itemIndex}
-                  extensionId={extensionData?.id}
-                  extensionName={extensionData?.name}
-                  extensionDisplayName={extensionData?.displayName}
-                  extensionDescription={extensionData?.description}
-                  extensionApplicationType={extensionData?.applicationType}
-                  extensionLogoImage={extensionData?.logoImage}
-                  isExtensionLocalDraft={extensionData?.localDraft}
-                  showDivider={itemIndex < allMyExtensions.length - 1}
-                  filter={selectedStatus}
-                  filterShowAllOptionValue={extensionStatusMenuItems[0]}
-                  showMenu
-                />
-              );
-            }}
-          </DynamicInfiniteScroll>
+            <InfiniteScrollList className="gap-4">
+              {itemIndex => {
+                const extensionData = allMyExtensions[itemIndex];
+                return (
+                  <ExtensionElement
+                    key={itemIndex}
+                    extensionId={extensionData?.id}
+                    extensionName={extensionData?.name}
+                    extensionDisplayName={extensionData?.displayName}
+                    extensionDescription={extensionData?.description}
+                    extensionApplicationType={extensionData?.applicationType}
+                    extensionLogoImage={extensionData?.logoImage}
+                    isExtensionLocalDraft={extensionData?.localDraft}
+                    showDivider={itemIndex < allMyExtensions.length - 1}
+                    filter={selectedStatus}
+                    filterShowAllOptionValue={extensionStatusMenuItems[0]}
+                    showMenu
+                  />
+                );
+              }}
+            </InfiniteScrollList>
+          </InfiniteScroll>
         </Card>
       )}
     </Stack>

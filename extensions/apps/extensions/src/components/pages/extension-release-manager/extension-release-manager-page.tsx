@@ -11,9 +11,11 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { ChevronRightIcon, XIcon, Loader2 } from 'lucide-react';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import { useAkashaStore, useDismissedCard, useRootComponentProps } from '@akashaorg/ui-core-hooks';
 import { Extension, NotificationEvents, NotificationTypes } from '@akashaorg/typings/lib/ui';
 import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated';
@@ -30,10 +32,20 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { ApolloError, NetworkStatus } from '@apollo/client';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
+
 const ENTRY_HEIGHT = 82;
+
 type ExtensionReleaseManagerPageProps = {
   extensionId: string;
   extensionName?: string;
@@ -335,18 +347,18 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
           </Button>
         </Stack>
         {appReleases?.length === 0 && (
-          <DefaultEmptyCard
+          <EmptyCard
             assetName="longbeam-notfound"
             infoText={t('You haven’t published any releases yet')}
           />
         )}
         {appReleases?.length > 0 && (
           <Card className="p-4">
-            <DynamicInfiniteScroll
+            <InfiniteScroll
               count={appReleases?.length}
               estimatedHeight={ENTRY_HEIGHT}
+              gap={16}
               overScan={1}
-              itemSpacing={16}
               hasNextPage={pageInfo && pageInfo?.hasNextPage}
               loading={loadingAppsReleasesQuery}
               onLoadMore={() => {
@@ -357,73 +369,61 @@ export const ExtensionReleaseManagerPage: React.FC<ExtensionReleaseManagerPagePr
                 });
               }}
             >
-              {({ itemIndex }) => {
-                const releaseData = appReleases[itemIndex]?.node;
-                const createdAt = releaseData
-                  ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale)
-                  : '';
-                return (
-                  <Stack spacing={4}>
-                    <button onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
-                      <Stack direction="row" justifyContent="between" alignItems="center">
-                        <Stack spacing={4}>
-                          <Stack direction="row" spacing={2} alignItems="center">
-                            <Typography variant="sm" className="font-semibold">
-                              {`Release ${releaseData?.version}`}
+              <InfiniteScrollList>
+                {itemIndex => {
+                  const releaseData = appReleases[itemIndex]?.node;
+                  const createdAt = releaseData
+                    ? formatDate(releaseData.createdAt, 'D MMM YYYY', locale)
+                    : '';
+                  return (
+                    <Stack spacing={4}>
+                      <button onClick={() => handleNavigateToReleaseInfoPage(releaseData.id)}>
+                        <Stack direction="row" justifyContent="between" alignItems="center">
+                          <Stack spacing={4}>
+                            <Stack direction="row" spacing={2} alignItems="center">
+                              <Typography variant="sm" className="font-semibold">
+                                {`Release ${releaseData?.version}`}
+                              </Typography>
+                              {itemIndex === 0 && <Badge variant="outline">{t('Current')}</Badge>}
+                            </Stack>
+                            <Typography variant="xs" className="font-medium">
+                              {createdAt}
                             </Typography>
-                            {itemIndex === 0 && (
-                              <Pill
-                                type="info"
-                                borderColor={{
-                                  light: 'secondaryLight',
-                                  dark: 'secondaryDark',
-                                }}
-                                label={t('Current')}
-                              />
-                            )}
                           </Stack>
-                          <Typography variant="xs" className="font-medium">
-                            {createdAt}
-                          </Typography>
+                          <ChevronRightIcon className="h-8 w-8 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
                         </Stack>
-                        <ChevronRightIcon className="h-8 w-8 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />
-                      </Stack>
-                    </button>
-                    {itemIndex < appReleases?.length - 1 && <Separator />}
-                  </Stack>
-                );
-              }}
-            </DynamicInfiniteScroll>
+                      </button>
+                      {itemIndex < appReleases?.length - 1 && <Separator />}
+                    </Stack>
+                  );
+                }}
+              </InfiniteScrollList>
+            </InfiniteScroll>
           </Card>
         )}
       </Stack>
-      <Modal
-        show={showModal}
-        onClose={handleModalClose}
-        actions={[
-          {
-            label: t('Cancel'),
-            variant: 'secondary',
-            onClick: handleModalClose,
-          },
-          {
-            label: t('Publish Extension'),
-            variant: 'primary',
-            onClick: handlePublishExtensionNav,
-          },
-        ]}
-        title={{
-          label: t('Release Cannot Be Published'),
-        }}
-      >
-        <Stack className="max-w-[567px]">
-          <Typography className="text-center">
-            {t(
-              'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
-            )}
-          </Typography>
-        </Stack>
-      </Modal>
+      <AlertDialog open={showModal} onOpenChange={handleModalClose}>
+        <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
+            <AlertDialogTitle>{t('Release Cannot Be Published')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Stack className="max-w-[567px]">
+                <Typography className="text-center">
+                  {t(
+                    'It appears your extension is currently in draft mode. To proceed with publishing a release, you’ll need to publish the extension first.',
+                  )}
+                </Typography>
+              </Stack>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="sm:justify-center">
+            <Button variant="outline" onClick={handleModalClose}>
+              {t('Cancel')}
+            </Button>
+            <Button onClick={handlePublishExtensionNav}>{t('Publish Extension')}</Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import ProfileStatsView from '../../profile-stats';
 import ProfileNotFound from '../../profile-not-found';
@@ -148,13 +148,13 @@ const ProfileInfoPage: React.FC<ProfileInfoPageProps> = props => {
           <ProfileBio title={t('Bio')} biography={profileData.description} />
         )}
         {!isLoggedIn && !profileData && (
-          <DefaultEmptyCard
+          <EmptyCard
             infoText={t("It seems this user hasn't filled in their information just yet. 🤔")}
             assetName="profile-not-filled w-[140px] h-[85px]"
           />
         )}
         {isLoggedIn && !profileData && isViewer && (
-          <DefaultEmptyCard
+          <EmptyCard
             infoText={t("Uh-uh! it looks like you haven't filled your information!")}
             buttonLabel={t('Fill my info')}
             buttonClickHandler={goToEditProfile}

@@ -10,7 +10,7 @@ type CardSize = {
   width?: string | number;
   height?: string | number;
 };
-export type DefaultEmptyCardProps = {
+export type EmptyCardProps = {
   publicImagePath?: string;
   assetExtension?: string;
   infoText: string;
@@ -30,7 +30,7 @@ export type DefaultEmptyCardProps = {
  * @param customCardSize - object with width and height to customise the card dimensions
  * @param buttonClickHandler - handler for the button
  */
-const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
+const EmptyCard: React.FC<EmptyCardProps> = ({
   publicImagePath = '/images',
   assetExtension = 'webp',
   infoText,
@@ -65,4 +65,4 @@ const DefaultEmptyCard: React.FC<DefaultEmptyCardProps> = ({
     </Card>
   );
 };
-export default DefaultEmptyCard;
+export default EmptyCard;

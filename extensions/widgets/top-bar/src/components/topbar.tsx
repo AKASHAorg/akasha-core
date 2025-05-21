@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useTheme } from '@akashaorg/ui-core-hooks';
 import { ThemingEvents } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-
 import { PanelLeftOpenIcon, ChevronLeftIcon, PanelRightOpenIcon } from 'lucide-react';
 import { Akasha } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { startWidgetsTogglingBreakpoint } from '@akashaorg/design-system-core/lib/utils/breakpoints';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -124,14 +123,12 @@ const Topbar: React.FC<ITopbarProps> = props => {
       <button onClick={onBrandClick} className="p-0 !ml-0 cursor-pointer">
         <Stack alignItems="center" justifyContent="center" direction="column" spacing={1}>
           <WorldIcon fallback={<Akasha />} />
-          <Pill
-            type="info"
-            label="Alpha"
-            weight="light"
-            color="white"
-            size="xs"
-            customStyle="border-errorLight dark:border-errorDark bg-errorLight dark:bg-errorDark"
-          />
+          <Badge
+            variant="destructive"
+            className="border-errorLight dark:border-errorDark bg-errorLight dark:bg-errorDark text-white"
+          >
+            Alpha
+          </Badge>
         </Stack>
       </button>
       <Stack direction="row" spacing={2}>

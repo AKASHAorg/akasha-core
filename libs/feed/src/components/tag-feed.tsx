@@ -6,7 +6,10 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData } from '@akashaorg/typings/lib/ui';
 import {
@@ -104,12 +107,12 @@ const TagFeed = (props: TagFeedProps) => {
         </ErrorLoader>
       )}
       {beams.length > 0 && (
-        <DynamicInfiniteScroll
-          dataTestId={dataTestId}
+        <InfiniteScroll
+          data-testid={dataTestId}
           count={beams.length}
           estimatedHeight={estimatedHeight}
+          gap={itemSpacing}
           overScan={scrollOptions.overScan}
-          itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={indexedStreamQuery.loading}
           onLoadMore={async () => {
@@ -125,13 +128,15 @@ const TagFeed = (props: TagFeedProps) => {
               });
             }
           }}
-          customStyle="mb-4"
+          className="mb-4"
         >
-          {({ itemIndex }) => {
-            const beam = beams[itemIndex];
-            return renderItem(beam.node);
-          }}
-        </DynamicInfiniteScroll>
+          <InfiniteScrollList>
+            {itemIndex => {
+              const beam = beams[itemIndex];
+              return renderItem(beam.node);
+            }}
+          </InfiniteScrollList>
+        </InfiniteScroll>
       )}
     </>
   );

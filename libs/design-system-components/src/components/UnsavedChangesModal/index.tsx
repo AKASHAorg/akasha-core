@@ -1,6 +1,14 @@
 import React from 'react';
-import Modal from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 export type UnsavedChangesModalProps = {
   showModal: boolean;
   cancelButtonLabel: string;
@@ -29,29 +37,22 @@ const UnsavedChangesModal: React.FC<UnsavedChangesModalProps> = props => {
     handleLeavePage,
   } = props;
   return (
-    <Modal
-      show={showModal}
-      actions={[
-        {
-          label: cancelButtonLabel,
-          variant: 'secondary',
-          onClick: handleModalClose,
-        },
-        {
-          label: leavePageButtonLabel,
-          variant: 'primary',
-          onClick: handleLeavePage,
-        },
-      ]}
-      title={{
-        label: title,
-        variant: 'h6',
-      }}
-      customStyle="py-4 px-6 md:px-24"
-      onClose={handleModalClose}
-    >
-      <Typography className="font-light">{description}</Typography>
-    </Modal>
+    <AlertDialog open={showModal} onOpenChange={handleModalClose}>
+      <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+        <AlertDialogHeader className="sm:text-center">
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>
+            <Typography className="font-light">{description}</Typography>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="sm:justify-center">
+          <Button variant="outline" onClick={handleModalClose}>
+            {cancelButtonLabel}
+          </Button>
+          <Button onClick={handleLeavePage}>{leavePageButtonLabel}</Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 export default UnsavedChangesModal;

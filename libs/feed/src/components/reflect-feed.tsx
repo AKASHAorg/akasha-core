@@ -6,7 +6,11 @@ import {
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
 import Stack from '@akashaorg/design-system-core/lib/components/Stack';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+  ScrollRestoration,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import Card from '@akashaorg/design-system-core/lib/components/Card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
@@ -63,6 +67,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
     loadingIndicator,
     renderItem,
   } = props;
+
   const apolloClient = useApolloClient();
   const { pendingReflections, removePendingReflection } = usePendingReflections();
   const indexingDID = React.useRef(getSDK().services.gql.indexingDID);
@@ -195,7 +200,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
         </ErrorLoader>
       )}
       {reflections && (
-        <DynamicInfiniteScroll
+        <InfiniteScroll
           header={
             <Card className="min-h-[inherit] p-0 border-none">
               {header}
@@ -208,14 +213,11 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
               ))}
             </Card>
           }
-          dataTestId={dataTestId}
-          scrollRestorationStorageKey={scrollRestorationStorageKey}
-          lastScrollRestorationKey={lastScrollRestorationKey}
-          enableScrollRestoration={true}
+          data-testid={dataTestId}
           count={reflections.length}
           estimatedHeight={estimatedHeight}
+          gap={itemSpacing}
           overScan={scrollOptions.overScan}
-          itemSpacing={itemSpacing}
           hasNextPage={pageInfo && pageInfo.hasNextPage}
           loading={reflectionStreamQuery.loading}
           onLoadMore={async () => {
@@ -232,12 +234,19 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
             }
           }}
         >
-          {({ itemIndex }) => {
-            const reflection = reflections[itemIndex];
-            if (!reflection?.node) return null;
-            return <>{renderItem(reflection.node)}</>;
-          }}
-        </DynamicInfiniteScroll>
+          <ScrollRestoration
+            scrollConfigStorageKey={scrollRestorationStorageKey}
+            lastScrollRestorationKey={lastScrollRestorationKey}
+          >
+            <InfiniteScrollList>
+              {itemIndex => {
+                const reflection = reflections[itemIndex];
+                if (!reflection?.node) return null;
+                return <>{renderItem(reflection.node)}</>;
+              }}
+            </InfiniteScrollList>
+          </ScrollRestoration>
+        </InfiniteScroll>
       )}
     </Card>
   );

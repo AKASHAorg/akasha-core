@@ -4,9 +4,8 @@ import { hasOwn, useAkashaStore, useRootComponentProps } from '@akashaorg/ui-cor
 import { type ContentBlock } from '@akashaorg/typings/lib/ui';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-
 import { XIcon } from 'lucide-react';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import SearchBar from '@akashaorg/design-system-components/lib/components/SearchBar';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -443,15 +442,14 @@ export const BeamEditor: React.FC = () => {
               </Stack>
               <Stack direction="row" spacing={2} className="flex-wrap">
                 {newTags.map((tag, index) => (
-                  <Pill
-                    key={index}
-                    label={tag}
-                    active={!editorTags.includes(tag)}
-                    icon={<XIcon className="h-5 w-5 [&>*]:stroke-secondaryLight dark:[&>*]:stroke-secondaryDark" />}
-                    iconDirection="right"
-                    onPillClick={() => handleDeleteTag(tag)}
-                    type="action"
-                  />
+                  <button key={index} type="button" onClick={() => handleDeleteTag(tag)}>
+                    <Badge key={index} variant={!editorTags.includes(tag) ? 'default' : 'outline'}>
+                      <Stack direction="row" spacing={2}>
+                        {tag}
+                        <XIcon size={14} />
+                      </Stack>
+                    </Badge>
+                  </button>
                 ))}
               </Stack>
             </Stack>

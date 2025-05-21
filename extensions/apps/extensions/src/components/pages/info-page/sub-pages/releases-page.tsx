@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
@@ -10,7 +10,10 @@ import {
   SortOrder,
 } from '@akashaorg/typings/lib/sdk/graphql-types-new';
 import InfoSubRouteHeader from '../InfoSubroutePageHeader';
-import DynamicInfiniteScroll from '@akashaorg/design-system-core/lib/components/DynamicInfiniteScroll';
+import {
+  InfiniteScroll,
+  InfiniteScrollList,
+} from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
 import { useGetAppsReleasesQuery } from '@akashaorg/ui-core-hooks/lib/generated';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { NetworkStatus } from '@apollo/client';
@@ -25,7 +28,8 @@ import {
   selectAppsReleases,
   selectAppsReleasesPageInfo,
 } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-releases-query';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
+
 type ReleasesPageProps = {
   appName: string;
   appId: string;
@@ -35,6 +39,7 @@ type ReleasesPageProps = {
   extensionType: AkashaAppApplicationType;
   releasesCount: number;
 };
+
 export const ReleasesPage = (props: ReleasesPageProps) => {
   const {
     extensionDisplayName,
@@ -44,6 +49,7 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
     appId,
     releasesCount,
   } = props;
+
   const { t } = useTranslation('app-extensions');
   const [expandedRelease, setExpandedRelease] = useState(null);
   const releasesReq = useGetAppsReleasesQuery({
@@ -113,55 +119,58 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
           {releasesReq.networkStatus === NetworkStatus.ready && !releases.length && (
             <>
               <Separator />
-              <DefaultEmptyCard
+              <EmptyCard
                 assetName="longbeam-notfound"
                 infoText={t('There are no releases for this extension yet')}
               />
             </>
           )}
+          EmptyCard
           {releases && releases.length > 0 && (
-            <DynamicInfiniteScroll
+            <InfiniteScroll
               count={releases.length}
               overScan={5}
               estimatedHeight={80}
-              itemSpacing={16}
+              gap={16}
               onLoadMore={handleLoadMoreReleases}
               loading={releasesReq.loading}
               hasNextPage={releasesReq.data?.akashaAppReleaseIndex?.pageInfo.hasNextPage}
             >
-              {item => {
-                const release = releases[item.itemIndex];
-                if (!release) return null;
-                const isExpanded = expandedRelease === release.node?.id;
-                const description = release.node?.meta?.find(
-                  m => m.property === 'description',
-                )?.value;
-                return (
-                  <Stack direction="column">
-                    <Separator />
-                    <Stack direction="row" justifyContent="between" className="mt-3 mb-2">
-                      <Typography variant="h6">
-                        {t('Version')} {release.node?.version}
-                      </Typography>
-                      <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
-                        {formatDate(release.node?.createdAt, 'DD MMM YYYY')}
-                      </Typography>
+              <InfiniteScrollList>
+                {itemIndex => {
+                  const release = releases[itemIndex];
+                  if (!release) return null;
+                  const isExpanded = expandedRelease === release.node?.id;
+                  const description = release.node?.meta?.find(
+                    m => m.property === 'description',
+                  )?.value;
+                  return (
+                    <Stack direction="column">
+                      <Separator />
+                      <Stack direction="row" justifyContent="between" className="mt-3 mb-2">
+                        <Typography variant="h6">
+                          {t('Version')} {release.node?.version}
+                        </Typography>
+                        <Typography variant="xs" className="font-medium text-grey4 dark:text-grey6">
+                          {formatDate(release.node?.createdAt, 'DD MMM YYYY')}
+                        </Typography>
+                      </Stack>
+                      <Stack direction="row" justifyContent="between">
+                        <Typography variant="xs" className="font-medium">
+                          {description}
+                          {!description && t('This release has no description added')}
+                        </Typography>
+                        {!isExpanded && description && (
+                          <Button variant="link" onClick={handleReadMoreClick(release.node?.id)}>
+                            {t('Read More')}
+                          </Button>
+                        )}
+                      </Stack>
                     </Stack>
-                    <Stack direction="row" justifyContent="between">
-                      <Typography variant="xs" className="font-medium">
-                        {description}
-                        {!description && t('This release has no description added')}
-                      </Typography>
-                      {!isExpanded && description && (
-                        <Button variant="link" onClick={handleReadMoreClick(release.node?.id)}>
-                          {t('Read More')}
-                        </Button>
-                      )}
-                    </Stack>
-                  </Stack>
-                );
-              }}
-            </DynamicInfiniteScroll>
+                  );
+                }}
+              </InfiniteScrollList>
+            </InfiniteScroll>
           )}
           {releasesReq.loading && (
             <Stack direction="column" alignItems="center">

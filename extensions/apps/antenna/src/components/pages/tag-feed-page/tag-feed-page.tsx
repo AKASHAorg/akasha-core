@@ -26,7 +26,7 @@ import TagProfileCard from '../../tag-profile-card';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
 import { ScrollTopWrapper } from '@akashaorg/ui/lib/akasha-components/scroll-top-wrapper';
 import { ScrollTopButton } from '@akashaorg/ui/lib/akasha-components/scroll-top-button';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 type TagFeedPageProps = {
   tagName: string;
 };
@@ -220,7 +220,7 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
         )}
         {beamCount === 0 && (
           <Stack className="mt-4">
-            <DefaultEmptyCard
+            <EmptyCard
               assetName="longbeam-notfound"
               infoText={`${t('There is no content found for the')} ${t('{{topic}}', { topic: listOfTags.length > 1 ? 'topics' : 'topic' })} ${listOfTags.map(tag => `#${tag}`).join(' ')}. ${t('Be the first one to create a beam for this topic')}! 🚀`}
             />

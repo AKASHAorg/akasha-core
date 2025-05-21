@@ -30,7 +30,7 @@ import {
   ErrorLoaderDescription,
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 import { getExtensionTypeLabel } from '../../../../utils/extension-utils';
 
 type DevInfoPageProps = {
@@ -170,7 +170,7 @@ export const DevInfoPage = (props: DevInfoPageProps) => {
           {appsReq.networkStatus === NetworkStatus.ready && !apps?.length && (
             <>
               <Separator />
-              <DefaultEmptyCard
+              <EmptyCard
                 assetName="longbeam-notfound"
                 infoText={t('There are no releases for this extension yet')}
               />

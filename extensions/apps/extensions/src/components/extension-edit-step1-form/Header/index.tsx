@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import { Badge } from '@akashaorg/ui/lib/akasha-components/badge';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import AppCoverImage from '@akashaorg/design-system-components/lib/components/AppCoverImage';
 import AppAvatar from '@akashaorg/design-system-components/lib/components/AppAvatar';
@@ -17,11 +18,16 @@ import Img from '@akashaorg/design-system-core/lib/components/Image';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { UploadIcon, PencilIcon, SquarePenIcon, InfoIcon, Trash2Icon } from 'lucide-react';
 import { ExtensionImageType, type Image } from '@akashaorg/typings/lib/ui';
-import Modal, { ModalProps } from '@akashaorg/design-system-core/lib/components/Modal';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@akashaorg/ui/lib/components/alert-dialog';
 import { ListItem } from '@akashaorg/ui/lib/library/list-item';
 import { DeleteImageModal } from './DeleteImageModal';
 import { AkashaAppApplicationType } from '@akashaorg/typings/lib/sdk/graphql-types-new';
-import Pill from '@akashaorg/design-system-core/lib/components/Pill';
 import { capitalize } from 'lodash';
 import { ExtensionTypeIcon } from '@akashaorg/ui/lib/akasha-components/extension-type-icon';
 
@@ -35,12 +41,12 @@ export type HeaderProps = {
   deleteLabel: string;
   saveLabel: string;
   imageTitle: {
-    logoImage: ModalProps['title'];
-    coverImage: ModalProps['title'];
+    logoImage: { label: string };
+    coverImage: { label: string };
   };
   deleteTitle: {
-    logoImage: ModalProps['title'];
-    coverImage: ModalProps['title'];
+    logoImage: { label: string };
+    coverImage: { label: string };
   };
   confirmationLabel: {
     logoImage: string;
@@ -322,27 +328,13 @@ export const Header: React.FC<HeaderProps> = ({
             alignItems="center"
             className="absolute right-0 -bottom-8"
           >
-            <Pill
-              type="info"
-              label={capitalize(extensionType?.toLowerCase())}
-              icon={<ExtensionTypeIcon extensionType={extensionType} className="h-4 w-4" />}
-              color={{
-                light: 'secondaryLight',
-                dark: 'secondaryDark',
-              }}
-              customStyle="py-0.5 bg-tertiaryLight dark:bg-tertiaryDark"
-            />
-            {nsfw && (
-              <Pill
-                type="info"
-                label={'NSFW'}
-                color={{
-                  light: 'errorDark',
-                  dark: 'white',
-                }}
-                customStyle="py-0.5 bg-errorFade dark:bg-errorDark"
-              />
-            )}
+            <Badge variant="outline">
+              <Stack direction="row" alignItems="center" spacing={2}>
+                {capitalize(extensionType?.toLowerCase())}
+                <ExtensionTypeIcon extensionType={extensionType} />
+              </Stack>
+            </Badge>
+            {nsfw && <Badge variant="destructive">NSFW</Badge>}
           </Stack>
         )}
       </Stack>
@@ -375,37 +367,37 @@ export const Header: React.FC<HeaderProps> = ({
         onDelete={onDelete}
         onClose={() => setShowDeleteImage(false)}
       />
-      <Modal
-        show={showLogoGuidelineModal}
-        title={{
-          label: logoGuidelines.titleLabel,
-          variant: 'h6',
-        }}
-        onClose={() => setShowLogoGuidelineModal(false)}
-      >
-        <Stack alignItems="center" spacing={4} className="p-4">
-          <ul className="list-disc ml-2 text-black dark:text-white">
-            {logoGuidelines.guidelines.map((guideline, index) => (
-              <li key={index}>
-                <Typography>{guideline}</Typography>
-              </li>
-            ))}
-          </ul>
-          <Stack alignItems="center" spacing={4} className="relative">
-            <Img
-              src={`${publicImagePath}/extension-logo-guidelines.webp`}
-              alt="extensions-logo-guideline"
-              customStyle={`w-[12.5rem]`}
-            />
-            <Typography
-              variant="xs"
-              className="font-medium text-grey4 dark:text-grey6 absolute bottom-0"
-            >
-              {logoGuidelines.imageDescription}
-            </Typography>
-          </Stack>
-        </Stack>
-      </Modal>
+      <AlertDialog open={showLogoGuidelineModal} onOpenChange={setShowLogoGuidelineModal}>
+        <AlertDialogContent className="py-4 px-6 md:px-24 sm:rounded-3xl border-none bg-card">
+          <AlertDialogHeader className="sm:text-center">
+            <AlertDialogTitle>{logoGuidelines.titleLabel}</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Stack alignItems="center" spacing={4} className="p-4">
+                <ul className="list-disc ml-2 text-black dark:text-white">
+                  {logoGuidelines.guidelines.map((guideline, index) => (
+                    <li key={index}>
+                      <Typography>{guideline}</Typography>
+                    </li>
+                  ))}
+                </ul>
+                <Stack alignItems="center" spacing={4} className="relative">
+                  <Img
+                    src={`${publicImagePath}/extension-logo-guidelines.webp`}
+                    alt="extensions-logo-guideline"
+                    customStyle={`w-[12.5rem]`}
+                  />
+                  <Typography
+                    variant="xs"
+                    className="font-medium text-grey4 dark:text-grey6 absolute bottom-0"
+                  >
+                    {logoGuidelines.imageDescription}
+                  </Typography>
+                </Stack>
+              </Stack>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
       <input ref={uploadInputRef} type="file" onChange={e => onUpload(e.target.files[0])} hidden />
     </Stack>
   );

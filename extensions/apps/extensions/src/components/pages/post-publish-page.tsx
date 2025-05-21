@@ -13,7 +13,7 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 export const PostPublishPage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('app-extensions');
@@ -54,8 +54,7 @@ export const PostPublishPage: React.FC = () => {
         <Typography variant="h5" className="font-semibold text-center">
           {t('Extension Published')}
         </Typography>
-        <DefaultEmptyCard
-          className="border-none"
+        <EmptyCard
           assetName="under-review"
           infoText={t(
             'Your submission is under review, this process might take sometime to ensure that your extension doesn’t violate our Code of Conduct.',
