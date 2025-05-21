@@ -24,10 +24,9 @@ import {
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import TagProfileCard from '../../tag-profile-card';
 import TagFeedHeaderLoader from './tag-feed-header-loader';
-import { ScrollTopWrapper } from '@akashaorg/ui/lib/akasha-components/scroll-top-wrapper'
-import { ScrollTopButton } from '@akashaorg/ui/lib/akasha-components/scroll-top-button'
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
-
+import { ScrollTopWrapper } from '@akashaorg/ui/lib/akasha-components/scroll-top-wrapper';
+import { ScrollTopButton } from '@akashaorg/ui/lib/akasha-components/scroll-top-button';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 type TagFeedPageProps = {
   tagName: string;
 };
@@ -220,25 +219,10 @@ const TagFeedPage: React.FC<TagFeedPageProps> = props => {
           </Stack>
         )}
         {beamCount === 0 && (
-          <Stack className="mt-8">
-            <InfoCard
-              titleLabel={
-                <>
-                  {t('There is no content found for the ')}
-                  {t('{{topic}}', { topic: listOfTags.length > 1 ? 'topics' : 'topic' })}{' '}
-                  {listOfTags.map(tag => (
-                    <span key={tag}>#{tag} </span>
-                  ))}
-                </>
-              }
-              bodyLabel={
-                <>
-                  {t('Be the first one to create a beam for this topic')}
-                  {'! 🚀'}
-                </>
-              }
-              bodyVariant="body1"
+          <Stack className="mt-4">
+            <EmptyCard
               assetName="longbeam-notfound"
+              infoText={`${t('There is no content found for the')} ${t('{{topic}}', { topic: listOfTags.length > 1 ? 'topics' : 'topic' })} ${listOfTags.map(tag => `#${tag}`).join(' ')}. ${t('Be the first one to create a beam for this topic')}! 🚀`}
             />
           </Stack>
         )}
