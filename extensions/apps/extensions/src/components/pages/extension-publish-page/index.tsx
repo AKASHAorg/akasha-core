@@ -12,7 +12,11 @@ import {
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Loader2 } from 'lucide-react';
-import StackedAvatar from '@akashaorg/design-system-core/lib/components/StackedAvatar';
+import {
+  ProfileAvatar,
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 import ExtensionReviewAndPublish from '../../extension-review-and-publish';
 import {
   transformSource,
@@ -28,8 +32,9 @@ import {
 } from '@akashaorg/ui-core-hooks/lib/generated';
 import { selectAkashaApp } from '@akashaorg/ui-core-hooks/lib/selectors/get-apps-by-publisher-did-query';
 import appRoutes, { SUBMIT_EXTENSION } from '../../../routes';
-import { DRAFT_EXTENSIONS, DRAFT_RELEASES, MAX_CONTRIBUTORS_DISPLAY } from '../../../constants';
+import { DRAFT_EXTENSIONS, DRAFT_RELEASES } from '../../../constants';
 import { createAppMutationCache } from './create-app-mutation-cache';
+import { StackedAvatar } from '@akashaorg/ui/lib/akasha-components/stacked-avatar';
 type ExtensionPublishPageProps = {
   extensionId: string;
 };
@@ -299,11 +304,17 @@ export const ExtensionPublishPage: React.FC<ExtensionPublishPageProps> = ({ exte
               )}
               {profilesData?.length > 0 && (
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <StackedAvatar
-                    userData={contributorAvatars}
-                    maxAvatars={MAX_CONTRIBUTORS_DISPLAY}
-                    size="md"
-                  />
+                  <StackedAvatar count={contributorAvatars.length}>
+                    {index => (
+                      <ProfileAvatar>
+                        <ProfileAvatarImage
+                          src={contributorAvatars[index].avatar?.src}
+                          alt={contributorAvatars[index].name}
+                        />
+                        <ProfileAvatarFallback />
+                      </ProfileAvatar>
+                    )}
+                  </StackedAvatar>
                   <Stack>
                     <Typography variant="xs" bold>
                       {profilesData[0]?.name}

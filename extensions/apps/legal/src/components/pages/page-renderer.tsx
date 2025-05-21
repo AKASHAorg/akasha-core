@@ -1,11 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import ErrorLoader from '@akashaorg/design-system-core/lib/components/ErrorLoader';
 import MarkdownCard from '@akashaorg/design-system-components/lib/components/MarkdownCard';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Loader2 } from 'lucide-react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
+import {
+  ErrorLoader,
+  ErrorLoaderDescription,
+  ErrorLoaderTitle,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
+
 export type PageRendererProps = {
   doc: string | null;
   error?: Error | null;
@@ -16,11 +21,10 @@ const PageRenderer: React.FC<PageRendererProps> = props => {
   const { t } = useTranslation('app-legal');
   if (error) {
     return (
-      <ErrorLoader
-        type="script-error"
-        title={t('There was an error loading the docs')}
-        details={error.message}
-      />
+      <ErrorLoader type="script-error">
+        <ErrorLoaderTitle>{t('There was an error loading the docs')}</ErrorLoaderTitle>
+        <ErrorLoaderDescription>{error.message}</ErrorLoaderDescription>
+      </ErrorLoader>
     );
   }
   return (

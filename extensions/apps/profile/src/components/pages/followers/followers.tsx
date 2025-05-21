@@ -3,7 +3,6 @@ import {
   InfiniteScroll,
   InfiniteScrollList,
 } from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import { ENTRY_HEIGHT, ITEM_SPACING } from '../constants';
 import { GetFollowersListByDidQuery } from '@akashaorg/typings/lib/sdk/graphql-operation-types-new';
 import { selectFollowers } from '@akashaorg/ui-core-hooks/lib/selectors/get-followers-list-by-did-query';

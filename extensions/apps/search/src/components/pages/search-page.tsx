@@ -18,18 +18,22 @@ import EntryCardRenderer from './entry-renderer';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
-import InfoCard from '@akashaorg/design-system-core/lib/components/InfoCard';
 import ProfileSearchCard from '../profile-search-card';
-import DefaultEmptyCard from '@akashaorg/design-system-components/lib/components/DefaultEmptyCard';
+import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 import SearchStartCard from '../search-start-card';
-import { Loader2 } from 'lucide-react';
 import DropDownFilter from '../drop-down-filter';
+import { Loader2 } from 'lucide-react';
 import SwitchCard from '../switch-card';
 import TagSearchCard from '../tag-search-card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { DropdownMenuItemGroupType } from '../base-dropdown-filter';
 import SearchResultCount from './search-result-count';
 import useIntersectionObserver from '@akashaorg/design-system-core/lib/utils/intersection-observer';
+import {
+  ErrorLoader,
+  ErrorLoaderTitle,
+  ErrorLoaderDescription,
+} from '@akashaorg/ui/lib/akasha-components/error-loader';
 export enum ButtonValues {
   CONTENT = 'Content',
   PEOPLE = 'People',
@@ -346,32 +350,23 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         )}
 
         {searchKeyword === '' && (
-          <DefaultEmptyCard
-            noBorder={true}
-            infoText=" ✨ Start searching for something ✨"
-            assetName="search-1"
-          />
+          <EmptyCard infoText=" ✨ Start searching for something ✨" assetName="search-1" />
         )}
 
         {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
           <Stack className="mt-8">
-            {
-              //@TODO replace with error loader
-            }
-            <InfoCard
-              titleLabel=""
-              bodyLabel={
+            <ErrorLoader type="list-not-available">
+              <ErrorLoaderTitle>
                 <>
                   {t('Oops! Looks like there’re no results for the word')}{' '}
                   <Typography bold>{searchKeyword}</Typography> {t('in')}{' '}
                   <Typography bold>{activeButton}</Typography>.{' '}
-                  {t('Try searching for something else or try a different Category!')}
                 </>
-              }
-              bodyVariant="body1"
-              customWidthStyle="w-[90%] md:w-[50%] m-auto"
-              assetName="list-not-available.webp"
-            />
+              </ErrorLoaderTitle>
+              <ErrorLoaderDescription>
+                {t('Try searching for something else or try a different Category!')}
+              </ErrorLoaderDescription>
+            </ErrorLoader>
           </Stack>
         )}
 
@@ -481,7 +476,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           </Stack>
         )}
         {/* triggers intersection observer */}
-        <Stack ref={loadmoreRef} className="p-2">
+        <Stack className="p-2" ref={loadmoreRef} />
       </Stack>
     </Card>
   );
