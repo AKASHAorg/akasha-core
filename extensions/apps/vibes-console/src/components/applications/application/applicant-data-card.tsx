@@ -6,7 +6,12 @@ import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { TApplicationStatus, renderStatusDetail } from '../../../utils';
 import {
@@ -56,11 +61,16 @@ export const ApplicantDataCard: React.FC<ApplicantDataCardProps> = props => {
               <ProfileAvatarFallback />
             </ProfileAvatar>
             <Stack>
-              <Tooltip content={applicant.name} placement="right">
-                <Typography variant="sm" bold>
-                  {applicant.name}
-                </Typography>
-              </Tooltip>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Typography variant="sm" bold>
+                      {applicant.name}
+                    </Typography>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">{applicant.name}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
               <ProfileAvatarButton profileDID={applicant.did.id}>
                 <ProfileDidField />

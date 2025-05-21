@@ -1,7 +1,12 @@
 import React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import { formatDate } from '@akashaorg/design-system-core/lib/utils';
 import { getModeratorStatusIndicator } from '../../utils';
 import { Moderator } from '@akashaorg/typings/lib/ui';
@@ -35,11 +40,16 @@ const ModeratorDetailMiniCard: React.FC<ModeratorDetailMiniCardProps> = props =>
         </ProfileAvatar>
         <Stack>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Tooltip content={moderator.name} placement="right">
-              <Typography variant="sm" bold className="truncate">
-                {moderator.name}
-              </Typography>
-            </Tooltip>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Typography variant="sm" bold className="truncate">
+                    {moderator.name}
+                  </Typography>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">{moderator.name}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <Stack
               className={`w-1.5 h-1.5 rounded-full ${getModeratorStatusIndicator(moderator.status)}`}
             />

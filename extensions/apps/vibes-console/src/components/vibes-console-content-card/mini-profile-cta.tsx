@@ -3,7 +3,12 @@ import { Image } from '@akashaorg/typings/lib/ui';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { TriangleAlertIcon } from 'lucide-react';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import {
   ProfileAvatarButton,
   ProfileDidField,
@@ -40,15 +45,20 @@ const MiniProfileCTA: React.FC<MiniProfileCTAProps> = props => {
             <ProfileAvatarFallback />
           </ProfileAvatar>
           <Stack>
-            <Tooltip content="Golden Showers" placement="right">
-              <Typography
-                variant="sm"
-                bold
-                className="max-w([12.5rem] md:[7.5rem]) w-fit cursor-default"
-              >
-                {itemData.name}
-              </Typography>
-            </Tooltip>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Typography
+                    variant="sm"
+                    bold
+                    className="max-w([12.5rem] md:[7.5rem]) w-fit cursor-default"
+                  >
+                    {itemData.name}
+                  </Typography>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">{itemData.name}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
             <ProfileAvatarButton profileDID={itemData.did.id}>
               <ProfileDidField />
