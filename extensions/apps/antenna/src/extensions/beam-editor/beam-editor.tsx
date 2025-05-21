@@ -445,7 +445,7 @@ export const BeamEditor: React.FC = () => {
                   <button key={index} type="button" onClick={() => handleDeleteTag(tag)}>
                     <Badge key={index} variant={!editorTags.includes(tag) ? 'default' : 'outline'}>
                       <Stack direction="row" spacing={2}>
-                        <Typography variant="xs">{tag}</Typography>
+                        {tag}
                         <XIcon size={14} />
                       </Stack>
                     </Badge>

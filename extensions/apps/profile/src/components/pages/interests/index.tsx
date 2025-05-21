@@ -188,7 +188,7 @@ const InterestsPage: React.FC<InterestsPageProps> = props => {
                   >
                     <Badge key={`${idx}-${interest}`} variant={isActive ? 'default' : 'outline'}>
                       <Stack direction="row" alignItems="center" spacing={2}>
-                        <Typography variant="xs">{interest.value}</Typography>
+                        {interest.value}
                         {isActive && <CheckIcon size={14} />}
                       </Stack>
                     </Badge>
