@@ -1,13 +1,12 @@
 import React, { Suspense, useMemo, useState } from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import ProfileNameField from '@akashaorg/design-system-core/lib/components/ProfileNameField';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { cn } from '@akashaorg/ui/lib/library/utils';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { transformSource, hasOwn } from '@akashaorg/ui-core-hooks';
 import { useTranslation } from 'react-i18next';
 import { useGetProfileByDidSuspenseQuery } from '@akashaorg/ui-core-hooks/lib/generated/apollo';
-import { PowerIcon, XIcon } from 'lucide-react';
+import { PowerIcon, TriangleAlertIcon, XIcon } from 'lucide-react';
 import {
   ProfileAvatar,
   ProfileAvatarFallback,
@@ -16,8 +15,14 @@ import {
 import {
   ProfileAvatarButton,
   ProfileDidField,
+  ProfileName,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
 import { CopyToClipboard } from '@akashaorg/ui/lib/akasha-components/copy-to-clipboard';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 export type SidebarHeaderProps = {
   authenticatedDID: string;
   connectLabel: string;
@@ -96,17 +101,23 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
               }
             >
               <button onClick={() => handleProfileAvatarClick(authenticatedDID)}>
-                <ProfileNameField
-                  did={authenticatedDID}
-                  profileName={profileName}
-                  size="md"
-                  truncateText
-                  showMissingNameWarning
-                  missingNameWarningLabel={t(
-                    'Your profile is unfollowable due to the lack of basic information, like your name.',
+                <ProfileAvatarButton profileDID={authenticatedDID}>
+                  {profileName ? (
+                    <ProfileName>{profileName}</ProfileName>
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger className="flex items-center gap-1">
+                        <ProfileName>{t('Empty Profile')}</ProfileName>
+                        <TriangleAlertIcon className="h-5 w-5 [&>*]:stroke-errorLight dark:[&>*]:stroke-errorDark" />
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        {t(
+                          'Your profile is unfollowable due to the lack of basic information, like your name.',
+                        )}
+                      </TooltipContent>
+                    </Tooltip>
                   )}
-                  hover={true}
-                />
+                </ProfileAvatarButton>
               </button>
             </Suspense>
           )}
