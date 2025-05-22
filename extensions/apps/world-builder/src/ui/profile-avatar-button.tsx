@@ -88,12 +88,11 @@ const ProfileAvatarButton = ({
       <div
         data-slot="profile-avatar-button"
         className={cn(
-          'group flex items-center cursor-pointer',
-          childCount > 1 && {
-            'flex flex-col items-center gap-1': size === 'lg' && vertical,
-            'grid grid-cols-[auto_1fr] gap-x-2 gap-y-1':
-              (size === 'md' || size === 'lg') && !vertical,
-            'flex items-center gap-1': size === 'sm',
+          'group flex items-center gap-x-2 gap-y-1 group/profile-avatar-button',
+          childCount > 2 && {
+            'flex flex-col items-center': size === 'lg' && vertical,
+            'grid grid-cols-[auto_1fr]': (size === 'md' || size === 'lg') && !vertical,
+            'flex items-center': size === 'sm',
           },
           className,
         )}
@@ -138,19 +137,16 @@ const ProfileName = ({ className, children, ...props }: React.ComponentProps<'di
         direction="row"
         alignItems="center"
         spacing={1}
-        className={cn(
-          'hover:underline hover:decoration-black dark:hover:decoration-white group-hover:underline group-hover:decoration-black dark:group-hover:decoration-white',
-          {
-            'self-end': size === 'lg' && !vertical,
-            'justify-self-start': size === 'md' || (size === 'lg' && !vertical),
-          },
-        )}
+        className={cn({
+          'self-end': size === 'lg' && !vertical,
+          'justify-self-start': size === 'md' || (size === 'lg' && !vertical),
+        })}
         {...props}
       >
         <Typography
           variant={size === 'sm' ? 'xs' : 'sm'}
           bold={size !== 'sm'}
-          className={className}
+          className={`group-hover/profile-avatar-button:underline group-hover/profile-avatar-button:decoration-black dark:group-hover/profile-avatar-button:decoration-white ${className}`}
         >
           {children}
         </Typography>
