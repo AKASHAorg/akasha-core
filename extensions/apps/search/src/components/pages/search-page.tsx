@@ -350,7 +350,10 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         )}
 
         {searchKeyword === '' && (
-          <EmptyCard infoText=" ✨ Start searching for something ✨" assetName="search-1" />
+          <EmptyCard
+            infoText=" ✨ Start searching for something ✨"
+            assetName="search-1"
+          />
         )}
 
         {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (

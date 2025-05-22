@@ -120,7 +120,6 @@ export const ReleasesPage = (props: ReleasesPageProps) => {
             <>
               <Separator />
               <EmptyCard
-                noBorder={true}
                 assetName="longbeam-notfound"
                 infoText={t('There are no releases for this extension yet')}
               />

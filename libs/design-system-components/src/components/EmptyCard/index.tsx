@@ -16,9 +16,9 @@ export type EmptyCardProps = {
   infoText: string;
   buttonLabel?: string;
   assetName?: string;
-  noBorder?: boolean;
   customCardSize?: CardSize;
   buttonClickHandler?: () => void;
+  className?: string;
 };
 
 /**
@@ -27,7 +27,6 @@ export type EmptyCardProps = {
  * if not provided will render a placeholder card instead
  * @param infoText - descriptive text
  * @param buttonLabel - button text
- * @param noBorder - defaults to false, can be set true to remove the card outer border
  * @param customCardSize - object with width and height to customise the card dimensions
  * @param buttonClickHandler - handler for the button
  */
@@ -39,12 +38,10 @@ const EmptyCard: React.FC<EmptyCardProps> = ({
   assetName,
   customCardSize,
   buttonClickHandler,
+  className,
 }) => {
   return (
-    <Card
-      className="p-4"
-      // customStyle="dark:bg-transparent"
-    >
+    <Card className={cn('p-4', className)}>
       {assetName ? (
         <Image
           src={`${publicImagePath}/${assetName}.${assetExtension}`}
