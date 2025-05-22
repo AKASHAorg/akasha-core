@@ -1,7 +1,7 @@
 import React from 'react';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import Image from '@akashaorg/design-system-core/lib/components/Image';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type ResignConfirmationProps = {
   assetName?: string;
@@ -24,11 +24,11 @@ export const ResignConfirmation: React.FC<ResignConfirmationProps> = props => {
   } = props;
   return (
     <Card className="p-4">
-      <Stack align="center" spacing="gap-y-6">
+      <Stack alignItems="center" spacing={6}>
         <Typography variant="h5" className="text-center">
           {titleLabel}
         </Typography>
-        <Stack customStyle="w-40 h-40 my-2 mx-auto">
+        <Stack className="w-40 h-40 my-2 mx-auto">
           <Image
             src={`${publicImgPath}/${assetName}.${assetExtension}`}
             dataTestId={`${assetName}-image`}

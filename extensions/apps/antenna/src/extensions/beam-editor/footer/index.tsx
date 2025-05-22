@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Tooltip from '@akashaorg/design-system-core/lib/components/Tooltip';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@akashaorg/ui/lib/akasha-components/tooltip';
 import { AddBlockButtonProps, AddBlock } from './add-block-button';
 import { EditorUIState } from '../types';
 export type TFooterProps = AddBlockButtonProps & {
@@ -86,14 +91,14 @@ export const Footer: React.FC<TFooterProps> = props => {
       {uiState === 'editor' && (
         <>
           {disableAddBlock && (
-            <Tooltip
-              placement="top"
-              content={maxBlocksWarningLabel}
-              trigger="hover"
-              contentCustomStyle="w-75"
-            >
-              <AddBlock disabled={disableAddBlock} addBlockLabel={addBlockLabel} />
-            </Tooltip>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <AddBlock disabled={disableAddBlock} addBlockLabel={addBlockLabel} />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">{maxBlocksWarningLabel}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
           {!disableAddBlock && (
             <AddBlock addBlockLabel={addBlockLabel} handleClickAddBlock={handleClickAddBlock} />

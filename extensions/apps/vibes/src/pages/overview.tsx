@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { useRootComponentProps } from '@akashaorg/ui-core-hooks';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import VibesIntroCard from '../components/vibes-intro-card';
 import VibesValuesCard from '../components/vibes-values-card';
 import BecomeModeratorCard from '../components/overview/become-moderator-card';
@@ -65,7 +65,7 @@ export const Overview: React.FC<OverviewPageProps> = props => {
   ];
 
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       {/**
        * if logged user is not a moderator, show this prompt
        */}

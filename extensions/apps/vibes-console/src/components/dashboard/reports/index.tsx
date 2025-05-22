@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ReportsHeader, ReportsHeaderProps } from './header';
 import { ReportItem, ReportItemProps, TReport } from './item';
 import { NoItemFound } from '../../no-item-found';
@@ -29,7 +29,7 @@ export const ItemReports: React.FC<TItemReportsProps> = props => {
     );
   }
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       <ReportsHeader introLabel={introLabel} reportLabel={reportLabel} />
       {!reportId &&
         reports.map(r => (

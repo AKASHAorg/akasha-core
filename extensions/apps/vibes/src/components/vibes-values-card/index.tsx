@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import VibesValueCard from './value-card';

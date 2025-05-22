@@ -5,13 +5,13 @@ import {
   ErrorLoaderTitle,
 } from '@akashaorg/ui/lib/akasha-components/error-loader';
 import { Loader2 } from 'lucide-react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   InfiniteScroll,
   InfiniteScrollList,
   ScrollRestoration,
 } from '@akashaorg/ui/lib/akasha-components/infinite-scroll';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import getSDK from '@akashaorg/core-sdk';
 import { AnalyticsEventData, EntityTypes } from '@akashaorg/typings/lib/ui';
 import {
@@ -181,7 +181,7 @@ const ReflectFeed: React.FC<ReflectFeedProps> = props => {
 
   if (!loadingIndicatorRef.current) {
     loadingIndicatorRef.current = () => (
-      <Stack align="center">
+      <Stack alignItems="center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </Stack>
     );

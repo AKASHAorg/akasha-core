@@ -6,7 +6,7 @@ import AuthorProfileAvatar from '@akashaorg/ui-lib-feed/lib/components/cards/aut
 import { mapBeamEntryData } from '@akashaorg/ui-core-hooks';
 */
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import {
   EntityTypes,
   NavigateToParams,
@@ -106,7 +106,7 @@ const EntryCardRenderer = (props: EntryCardRendererProps) => {
   return (
     <>
       {itemData && itemData.author?.id && (
-        <Stack customStyle="mb-2">
+        <Stack className="mb-2">
           {/* !itemData.nsfw && itemData.active && (
             <EntryCard
               nsfwText={t(

@@ -1,6 +1,6 @@
 import React, { ReactNode, Ref, useState, useMemo } from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import EntryCardRemoved from './entry-card-removed';
 import CardActions from './card-actions';
 import { EllipsisIcon } from 'lucide-react';
@@ -119,8 +119,8 @@ const EntryCard: React.FC<EntryCardProps> = props => {
          */
         {...(contentClickable && showNSFWContent && { onClick: onContentClick })}
       >
-        <Stack spacing="gap-y-2" padding="p-4" customStyle={`grow ${hoverStyle}`}>
-          <Stack direction="row" justify="between">
+        <Stack spacing={2} className={`p-4 grow ${hoverStyle}`}>
+          <Stack direction="row" justifyContent="between">
             {profileAvatar}
 
             <DropdownMenu modal={false}>
@@ -190,23 +190,19 @@ const EntryCard: React.FC<EntryCardProps> = props => {
                */}
               {(!entryData.nsfw || showNSFWContent || (nsfwUserSetting && isLoggedIn)) && (
                 <Stack
-                  justifySelf="start"
-                  alignSelf="start"
-                  align="start"
-                  spacing="gap-y-2"
-                  customStyle="grow"
-                  fullWidth={true}
+                  alignItems="start"
+                  spacing={2}
+                  className="justify-self-start self-start grow w-full"
                 >
                   {children}
                 </Stack>
               )}
               {showHiddenContent && entryData.tags?.length > 0 && (
                 <Stack
-                  justify="start"
+                  justifyContent="start"
                   direction="row"
-                  spacing="gap-2"
-                  customStyle="flex-wrap mt-auto"
-                  fullWidth
+                  spacing={2}
+                  className="flex-wrap mt-auto w-full"
                 >
                   {entryData.tags?.map((tag, index) => (
                     <button

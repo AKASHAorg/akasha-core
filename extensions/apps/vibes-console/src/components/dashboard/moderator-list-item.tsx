@@ -1,6 +1,5 @@
 import React from 'react';
-import Avatar from '@akashaorg/design-system-core/lib/components/Avatar';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -10,6 +9,11 @@ import {
   ProfileAvatarButton,
   ProfileDidField,
 } from '@akashaorg/ui/lib/akasha-components/profile-avatar-button';
+import {
+  ProfileAvatarFallback,
+  ProfileAvatarImage,
+  ProfileAvatar,
+} from '@akashaorg/ui/lib/akasha-components/profile-avatar';
 export type ModeratorListItemProps = {
   assignButtonLabel: string;
   assignedAdmin: boolean;
@@ -22,14 +26,11 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
     props;
   if (assignedAdmin) {
     return (
-      <Stack direction="row" spacing="gap-x-2" align="center" customStyle="mb-24">
-        <Avatar
-          avatar={transformSource(selectedModerator?.avatar?.default)}
-          alternativeAvatars={selectedModerator?.avatar?.alternatives?.map(alternative =>
-            transformSource(alternative),
-          )}
-        />
-
+      <Stack direction="row" spacing={2} alignItems="center" className="mb-24">
+        <ProfileAvatar>
+          <ProfileAvatarImage src={transformSource(selectedModerator?.avatar?.default).src} />
+          <ProfileAvatarFallback />
+        </ProfileAvatar>
         <Stack>
           <Typography
             variant="sm"
@@ -45,17 +46,15 @@ const ModeratorListItem: React.FC<ModeratorListItemProps> = props => {
     );
   }
   return (
-    <Stack spacing="gap-y-4">
+    <Stack spacing={4}>
       {activeModerators.map((moderator, idx) => (
         <React.Fragment key={moderator.name}>
-          <Stack direction="row" align="center" justify="between">
-            <Stack direction="row" spacing="gap-x-2" align="center">
-              <Avatar
-                avatar={transformSource(moderator?.avatar?.default)}
-                alternativeAvatars={moderator?.avatar?.alternatives?.map(alternative =>
-                  transformSource(alternative),
-                )}
-              />
+          <Stack direction="row" alignItems="center" justifyContent="between">
+            <Stack direction="row" spacing={2} alignItems="center">
+              <ProfileAvatar>
+                <ProfileAvatarImage src={transformSource(moderator?.avatar?.default).src} />
+                <ProfileAvatarFallback />
+              </ProfileAvatar>
 
               <Stack>
                 <Typography

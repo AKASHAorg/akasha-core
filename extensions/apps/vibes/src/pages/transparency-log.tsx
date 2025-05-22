@@ -9,7 +9,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@akashaorg/ui/lib/components/select';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 
 import TransparencyLogItemCard from '../components/transparency-log/log-item';
 import NoFlaggedItems from '../components/transparency-log/no-flagged-items';
@@ -47,9 +47,9 @@ export const TransparencyLog: React.FC<unknown> = () => {
   });
 
   return (
-    <Stack spacing="gap-y-4">
-      <Stack direction="row" align="center" justify="between">
-        <Stack direction="row" align="center" spacing="gap-x-3">
+    <Stack spacing={4}>
+      <Stack direction="row" alignItems="center" justifyContent="between">
+        <Stack direction="row" alignItems="center" spacing={3}>
           <Select
             name="filterByDecision"
             value={filterByDecision}
@@ -94,7 +94,7 @@ export const TransparencyLog: React.FC<unknown> = () => {
       )}
 
       {!!filteredEntries.length && (
-        <Stack spacing="gap-y-4">
+        <Stack spacing={4}>
           {filteredEntries.map(el => (
             <TransparencyLogItemCard
               key={el.contentId}

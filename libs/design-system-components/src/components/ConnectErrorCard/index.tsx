@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { TriangleAlertIcon } from 'lucide-react';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';

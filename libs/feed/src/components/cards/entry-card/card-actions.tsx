@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import Link from '@akashaorg/design-system-core/lib/components/Link';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { MessagesSquareIcon } from 'lucide-react';
@@ -41,7 +41,13 @@ const CardActions: React.FC<CardActionProps> = props => {
     </Card>
   );
   return (
-    <Stack direction="row" align="center" justify="end" spacing="gap-x-2" customStyle={customStyle}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      justifyContent="end"
+      spacing={2}
+      className={customStyle}
+    >
       <>{actionsRight}</>
       <Link
         to={`${reflectAnchorLink}/${itemId}`}
@@ -51,7 +57,7 @@ const CardActions: React.FC<CardActionProps> = props => {
         customStyle={`h-fit cursor-${disableActions ? 'not-allowed' : 'pointer'}`}
       >
         {reflectionsCount ? (
-          <Stack dataTestId="reflections-count" direction="row" align="end" spacing="gap-x-1">
+          <Stack data-testid="reflections-count" direction="row" alignItems="end" spacing={1}>
             {reflectIconUi}
             <Typography
               variant="sm"

@@ -17,7 +17,7 @@ import {
 } from '@akashaorg/design-system-core/lib/components/Icon/akasha-icons';
 import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
-import Card from '@akashaorg/design-system-core/lib/components/Card';
+import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { useNavigate } from '@tanstack/react-router';
 import { ArrowRightLeftIcon } from 'lucide-react';
 
@@ -177,10 +177,7 @@ const ConnectWallet: React.FC = () => {
     // disconnect wallet
     signOutCall.current();
   };
-  const textColor = {
-    light: 'grey4',
-    dark: 'grey7',
-  } as const;
+
   return (
     <Stack spacing={8}>
       <Stack>

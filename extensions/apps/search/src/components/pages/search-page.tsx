@@ -16,13 +16,13 @@ import {
 } from '@akashaorg/ui-core-hooks';
 import EntryCardRenderer from './entry-renderer';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Separator } from '@akashaorg/ui/lib/components/separator';
 import ProfileSearchCard from '../profile-search-card';
 import EmptyCard from '@akashaorg/design-system-components/lib/components/EmptyCard';
 import SearchStartCard from '../search-start-card';
 import DropDownFilter from '../drop-down-filter';
-import Spinner from '@akashaorg/design-system-core/lib/components/Spinner';
+import { Loader2 } from 'lucide-react';
 import SwitchCard from '../switch-card';
 import TagSearchCard from '../tag-search-card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
@@ -357,7 +357,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
         )}
 
         {!isFetchingSearch && searchKeyword && !searchState[activeButton]?.results?.length && (
-          <Stack customStyle="mt-8">
+          <Stack className="mt-8">
             <ErrorLoader type="list-not-available">
               <ErrorLoaderTitle>
                 <>
@@ -373,7 +373,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
           </Stack>
         )}
 
-        <Stack customStyle="mt-4">
+        <Stack className="mt-4">
           {activeButton === ButtonValues.PEOPLE &&
             searchState[ButtonValues.PEOPLE].done &&
             !!searchProfilesState.length && (
@@ -388,7 +388,7 @@ const SearchPage: React.FC<SearchPageProps> = props => {
                   />
                 }
                 {searchProfilesState?.map((profileData: Profile, index: number) => (
-                  <Stack key={index} customStyle="pb-4">
+                  <Stack key={index} className="pb-4">
                     <ProfileSearchCard
                       handleFollow={() => handleFollowProfile(profileData?.did?.id)}
                       handleUnfollow={() => handleUnfollowProfile(profileData?.did?.id)}
@@ -471,23 +471,15 @@ const SearchPage: React.FC<SearchPageProps> = props => {
             )}
         </Stack>
         {isFetchingSearch && (
-          <Stack align="center" justify="center" spacing="gap-y-8" customStyle="p-8 m-auto">
-            <Spinner
-              color={{
-                light: 'secondaryLight',
-                dark: 'secondaryDark',
-              }}
-              size="xxl"
-              loadingLabel="Loading..."
-              partialSpinner={true}
-            />
+          <Stack alignItems="center" justifyContent="center" spacing={8} className="p-8 m-auto">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <Typography variant="xs" className="font-medium">
               {t('Searching...')}
             </Typography>
           </Stack>
         )}
         {/* triggers intersection observer */}
-        <Stack padding="p-2" ref={loadmoreRef} />
+        <Stack className="p-2" ref={loadmoreRef} />
       </Stack>
     </Card>
   );

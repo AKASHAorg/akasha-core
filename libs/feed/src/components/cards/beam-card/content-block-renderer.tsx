@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import NSFW from '../nsfw-card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { hasOwn, useRootComponentProps } from '@akashaorg/ui-core-hooks';
@@ -148,9 +148,9 @@ const ContentBlockRenderer: React.FC<ContentBlockRendererProps> = props => {
       )}
       {showHiddenContent && showNSFWCard && (
         <Stack
-          justify="center"
+          justifyContent="center"
           direction="row"
-          customStyle="rounded-[0.625rem] bg-grey9 dark:bg-grey5"
+          className="rounded-[0.625rem] bg-grey9 dark:bg-grey5"
         >
           <Card className="bg-background m-3.5 p-2 w-fit h-[3.75rem]">
             {/* showHiddenContent is the flag used to hide nsfw blocks in the

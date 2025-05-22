@@ -1,5 +1,5 @@
 import React from 'react';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import {
   Tooltip,
@@ -79,7 +79,7 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
         metadata={
           <>
             {publishTime && !hidePublishTime && (
-              <Stack direction="row" align="center" spacing="gap-x-1">
+              <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography
                   variant="xs"
                   className="font-medium font-normal text-grey4 dark:text-grey7"
@@ -104,7 +104,7 @@ const AuthorProfileAvatar: React.FC<AuthorProfileAvatarProps> = props => {
               </Stack>
             )}
             {pending && (
-              <Stack direction="row" align="center" spacing="gap-x-1">
+              <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography
                   variant="xs"
                   className="font-medium font-normal text-grey4 dark:text-grey7"

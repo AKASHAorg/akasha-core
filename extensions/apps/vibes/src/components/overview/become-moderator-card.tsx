@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '@akashaorg/ui/lib/akasha-components/card';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Button } from '@akashaorg/ui/lib/akasha-components/button';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 export type BecomeModeratorCardProps = {
@@ -13,7 +13,7 @@ const BecomeModeratorCard: React.FC<BecomeModeratorCardProps> = props => {
   const { titleLabel, subtitleLabel, buttonLabel, onClickApply } = props;
   return (
     <Card className="p-4">
-      <Stack spacing="gap-y-6">
+      <Stack spacing={6}>
         <Typography variant="h5" bold>
           {titleLabel}
         </Typography>

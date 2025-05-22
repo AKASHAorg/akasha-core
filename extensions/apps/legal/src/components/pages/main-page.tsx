@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { ChevronRightIcon } from 'lucide-react';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import PageLayout from './base-layout';
@@ -16,7 +16,7 @@ const MainPage: React.FC = () => {
 
   return (
     <PageLayout title={t('AKASHA Legal')}>
-      <Stack padding="px-4">
+      <Stack className="px-4">
         {legalItems.map((item: ILegalItem, idx: number) => {
           const baseStyle = `flex py-4 justify-between items-center ${
             idx !== legalItems.length - 1

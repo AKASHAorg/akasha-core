@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import VibesConsoleContentCard from '../components/vibes-console-content-card';
 import { DashboardHeader } from '../components/dashboard';
 import routes, { REVIEW_ITEM, SETTINGS, VIEW_ALL_REPORTS } from '../routes';
@@ -29,7 +29,7 @@ export const Dashboard: React.FC<unknown> = () => {
     });
   };
   return (
-    <Stack spacing="gap-y-3">
+    <Stack spacing={3}>
       <DashboardHeader
         titleLabel={t('Content Review Hub')}
         inputPlaceholderLabel={t('Search for Case#')}
@@ -38,7 +38,7 @@ export const Dashboard: React.FC<unknown> = () => {
       />
       {!entries.length && <NoItemFound title="No reported content found. Please try again later" />}
       {!!entries.length && (
-        <Stack spacing="gap-y-3">
+        <Stack spacing={3}>
           {entries.map(e => (
             <VibesConsoleContentCard
               key={e.id}

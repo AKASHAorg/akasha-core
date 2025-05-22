@@ -2,7 +2,7 @@ import React from 'react';
 import Checkbox from '@akashaorg/design-system-core/lib/components/Checkbox';
 import { RadioGroup, RadioGroupItem } from '@akashaorg/ui/lib/components/radio-group';
 import { Label } from '@akashaorg/ui/lib/components/label';
-import Stack from '@akashaorg/design-system-core/lib/components/Stack';
+import { Stack } from '@akashaorg/ui/lib/akasha-components/stack';
 import { Typography } from '@akashaorg/ui/lib/akasha-components/typography';
 import { Textarea } from '@akashaorg/ui/lib/akasha-components/textarea';
 import { Input } from '@akashaorg/ui/lib/akasha-components/input';
@@ -44,13 +44,13 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
 
   return (
     <PageHeader {...props}>
-      <Stack spacing="gap-y-4">
-        <Stack spacing="gap-y-2">
+      <Stack spacing={4}>
+        <Stack spacing={2}>
           <Typography className="font-medium">{section1.title}?</Typography>
           <Typography variant="xs" className="font-medium font-light">
             {section1.subtitle}
           </Typography>
-          <Stack direction="row" spacing="gap-x-4">
+          <Stack direction="row" spacing={4}>
             <RadioGroup
               defaultValue={section1.radioButtons[0].value}
               onValueChange={onRadioButtonChange}
@@ -76,7 +76,7 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
           />
         </Stack>
 
-        <Stack spacing="gap-y-2">
+        <Stack spacing={2}>
           <Typography className="font-medium">{section2.title}?</Typography>
           <Textarea
             placeholder={`${section2.placeholder} ...`}
@@ -87,7 +87,7 @@ export const BMDetails: React.FC<BMDetailsProps> = props => {
           />
         </Stack>
 
-        <Stack direction="row" spacing="gap-x-4">
+        <Stack direction="row" spacing={4}>
           <Checkbox
             id="accept"
             name="accept"
