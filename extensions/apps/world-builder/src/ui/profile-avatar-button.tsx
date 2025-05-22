@@ -88,7 +88,7 @@ const ProfileAvatarButton = ({
       <div
         data-slot="profile-avatar-button"
         className={cn(
-          'group flex items-center gap-1 group/profile-avatar-button',
+          'group flex items-center gap-x-2 gap-y-1 group/profile-avatar-button',
           childCount > 2 && {
             'flex flex-col items-center': size === 'lg' && vertical,
             'grid grid-cols-[auto_1fr]': (size === 'md' || size === 'lg') && !vertical,
