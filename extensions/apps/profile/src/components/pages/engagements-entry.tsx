@@ -108,7 +108,7 @@ export const EngagementsEntry: React.FC<EngagementsEntryProps> = props => {
               )}
             />
           </ProfileAvatarButtonAvatar>
-          <ProfileName>{profileData?.name}</ProfileName>
+          {profileData?.name && <ProfileName>{profileData?.name}</ProfileName>}
           <ProfileDidField />
         </ProfileAvatarButton>
       </a>
